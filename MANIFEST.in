@@ -1,4 +1,4 @@
 include LICENSE
 include README.rst
-recursive-include drf_amsterdam/static *
-recursive-include drf_amsterdam/templates *
+recursive-include datapunt_api/static *
+recursive-include datapunt_api/templates *
