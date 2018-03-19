@@ -50,6 +50,9 @@ class HALSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class HALPagination(pagination.PageNumberPagination):
+    """
+    Implement HAL-JSON style pagination (standard for Datapunt APIs).
+    """
     page_size_query_param = 'page_size'
 
     def get_paginated_response(self, data):
@@ -81,7 +84,7 @@ class HALPagination(pagination.PageNumberPagination):
         ]))
 
 
-class DisabledHTMLFilterBackend(DjangoFilterBackend):
+class _DisabledHTMLFilterBackend(DjangoFilterBackend):
     """
     See https://github.com/tomchristie/django-rest-framework/issues/3766
     This prevents DRF from generating the filter dropdowns (which can be HUGE in our case)
@@ -91,14 +94,19 @@ class DisabledHTMLFilterBackend(DjangoFilterBackend):
         return ""
 
 
-class AtlasViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
+class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet subclass for use in Datapunt APIs.
+
+    Note:
+    - this uses HAL JSON style pagination.
+    """
     renderer_classes = DEFAULT_RENDERERS
     pagination_class = HALPagination
-    filter_backends = (DisabledHTMLFilterBackend,)
+    filter_backends = (_DisabledHTMLFilterBackend,)
 
 
 class RelatedSummaryField(serializers.Field):
-
     def to_representation(self, value):
         count = value.count()
         model_name = value.model.__name__
@@ -114,7 +122,17 @@ class RelatedSummaryField(serializers.Field):
         )
 
 
+# Note about DisplayField below; setting source to '*' causes the
+# whole (model) instance to be passed to the DisplayField See:
+# http://www.django-rest-framework.org/api-guide/fields/#source
+# Display field then uses the __str__ function on the Django
+# model to get a nice string representation that can be presented
+# to the user.
+
 class DisplayField(serializers.Field):
+    """
+    Add a `_display` field, based on Model string representation.
+    """
     def __init__(self, *args, **kwargs):
         kwargs['source'] = '*'
         kwargs['read_only'] = True
