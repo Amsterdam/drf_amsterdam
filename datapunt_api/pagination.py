@@ -1,4 +1,5 @@
-from rest_framework import pagination
+from collections import OrderedDict
+from rest_framework import pagination, response
 from rest_framework.utils.urls import replace_query_param
 
 
@@ -35,4 +36,3 @@ class HALPagination(pagination.PageNumberPagination):
             ('count', self.page.paginator.count),
             ('results', data)
         ]))
-
