@@ -1,4 +1,5 @@
 from rest_framework import pagination
+from rest_framework.utils.urls import replace_query_param
 
 
 class HALPagination(pagination.PageNumberPagination):
