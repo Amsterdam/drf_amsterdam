@@ -9,7 +9,6 @@ django-filter
 
 django-cors-headers
 
-
 pytest
 pytest-flake8
 pytest-django
@@ -18,4 +17,3 @@ pytest-django
 coreapi
 
 git+https://github.com/Amsterdam/objectstore.git#egg=datapunt-objectstore
-git+https://github.com/Amsterdam/drf_amsterdam.git#egg=drf_amsterdam
