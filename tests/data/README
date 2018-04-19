@@ -1,8 +1,0 @@
-# Example data set KNMI "Gehomogeniseerde reeks maandtemperaturen De Bilt"
-This is a data set of temperature records that have been corrected for various
-sources of measurement errors and inhomogeneities so that it is suitable for
-climate trend analyses.
-[Explanation (in Dutch)](http://projects.knmi.nl/klimatologie/onderzoeksgegevens/homogeen_260/index.html)
-
-[Original data source (accessed at 17-04-29018)](http://projects.knmi.nl/klimatologie/onderzoeksgegevens/homogeen_260/tg_hom_mnd260.txt)
-

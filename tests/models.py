@@ -4,6 +4,9 @@ from django.db import models
 class WeatherStation(models.Model):
     number = models.IntegerField(unique=True)
 
+    def __str__(self):
+        return 'DISPLAY FIELD CONTENT'
+
 
 class TemperatureRecord(models.Model):
     class Meta:

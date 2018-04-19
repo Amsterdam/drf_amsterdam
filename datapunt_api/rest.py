@@ -7,7 +7,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from .pagination import HALPagination
 from .serializers import (  # noqa: F401
     DisplayField, DataSetSerializerMixin, get_links,
-    HALSerializer, LinksField, RelatedSummaryField
+    HALSerializer, LinksField, RelatedSummaryField,
+    SelfLinkSerializerMixin
 )
 
 DEFAULT_RENDERERS = (renderers.JSONRenderer, renderers.BrowsableAPIRenderer)
