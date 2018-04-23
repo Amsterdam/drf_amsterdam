@@ -18,11 +18,11 @@ def tryStep(String message, Closure block, Closure tearDown = null) {
 
 
 node {
-    stage("Checkout, build and run tests (do not push image).") {
+    stage("Checkout") {
         checkout scm
     }
 
-    stage('Test') {
+    stage('Build & Test') {
         tryStep "test", {
             sh "docker build -t drf_amsterdam_test . &&" +
 		"docker run --rm drf_amsterdam_test python runtests.py &&" +
