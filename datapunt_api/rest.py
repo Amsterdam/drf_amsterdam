@@ -18,7 +18,8 @@ FORMATS = [dict(format=r.format, type=r.media_type) for r in DEFAULT_RENDERERS]
 class _DisabledHTMLFilterBackend(DjangoFilterBackend):
     """
     See https://github.com/tomchristie/django-rest-framework/issues/3766
-    This prevents DRF from generating the filter dropdowns (which can be HUGE in our case)
+    This prevents DRF from generating the filter dropdowns (which can be HUGE
+    in our case)
     """
 
     def to_html(self, request, queryset, view):
