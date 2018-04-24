@@ -1,6 +1,9 @@
 """
 Bounding box methods usefull for Amsterdam.
 """
+from math import pi, cos
+from django.contrib.gis.geos import Point
+from rest_framework.serializers import ValidationError
 
 # Default amstermdam bbox lon, lat, lon, lat
 # square around Amsterdam.
@@ -8,24 +11,62 @@ BBOX = [52.03560, 4.58565,
         52.48769, 5.31360]
 
 
-def determine_bbox(request):
+
+def parse_xyr(value: str) -> (Point, int):
     """
-    Create a bounding box if it is given with the request.
+    Parse x, y, radius input.
     """
+    try:
+        x, y, radius = value.split(',')
+    except ValueError:
+        raise ValidationError(
+            "Locatie must be rdx,rdy,radius or lat,long,radius"
+        )
 
-    err = "Invalid bbox given"
+    try:
+        # Converting , to . and then to float
+        x = float(x)
+        y = float(y)
+        radius = float(radius)
+    except ValueError:
+        raise ValidationError(
+            "Locatie must be x: float, y: float, r: int"
+        )
 
-    if 'bbox' not in request.query_params:
-        # set default value
-        return BBOX, None
+    # Checking if the given coords are in RD, otherwise converting
+    if y > 10:
+        point = Point(x, y, srid=28992).transform(4326, clone=True)
+    else:
+        point = Point(y, x, srid=4326)
 
-    bboxp = request.query_params['bbox']
-    bbox, err = valid_bbox(bboxp)
+    radius = dist_to_deg(radius, x)
+    return point, radius
 
-    if err:
-        return None, err
 
-    return bbox, err
+def dist_to_deg(distance, latitude):
+    """
+    distance = distance in meters
+    latitude = latitude in degrees
+    at the equator, the distance of one degree is equal in latitude and longitude.
+    at higher latitudes, a degree longitude is shorter in length, proportional to cos(latitude)
+    http://en.wikipedia.org/wiki/Decimal_degrees
+    This function is part of a distance filter where the database 'distance' is in degrees.
+    There's no good single-valued answer to this problem.
+    The distance/ degree is quite constant N/S around the earth (latitude),
+    but varies over a huge range E/W (longitude).
+    Split the difference: I'm going to average the the degrees latitude and degrees longitude
+    corresponding to the given distance. At high latitudes, this will be too short N/S
+    and too long E/W. It splits the errors between the two axes.
+    Errors are < 25 percent for latitudes < 60 degrees N/S.
+    """
+    #   d * (180 / pi) / earthRadius   ==> degrees longitude
+    #   (degrees longitude) / cos(latitude)  ==> degrees latitude
+
+    lat = latitude if latitude >= 0 else -1 * latitude
+    rad2deg = 180 / pi
+    earthRadius = 6378160.0
+    latitudeCorrection = 0.5 * (1 + cos(lat * pi / 180))
+    return (distance / (earthRadius * latitudeCorrection) * rad2deg)
 
 
 def valid_bbox(bboxp):

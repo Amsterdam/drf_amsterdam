@@ -1,13 +1,12 @@
 from collections import OrderedDict
 
-from rest_framework import pagination, response
 from rest_framework import renderers, serializers
-from rest_framework import viewsets, filters
+from rest_framework import viewsets
 from rest_framework.reverse import reverse
-from rest_framework.utils.urls import replace_query_param
 from rest_framework_extensions.mixins import DetailSerializerMixin
-
 from django_filters.rest_framework import DjangoFilterBackend
+
+from .pagination import HALPagination
 
 DEFAULT_RENDERERS = (renderers.JSONRenderer, renderers.BrowsableAPIRenderer)
 FORMATS = [dict(format=r.format, type=r.media_type) for r in DEFAULT_RENDERERS]
@@ -49,45 +48,11 @@ class HALSerializer(serializers.HyperlinkedModelSerializer):
     serializer_url_field = LinksField
 
 
-class HALPagination(pagination.PageNumberPagination):
-    """
-    Implement HAL-JSON style pagination (standard for Datapunt APIs).
-    """
-    page_size_query_param = 'page_size'
-
-    def get_paginated_response(self, data):
-        self_link = self.request.build_absolute_uri()
-        if self_link.endswith(".api"):
-            self_link = self_link[:-4]
-
-        if self.page.has_next():
-            next_link = replace_query_param(
-                self_link, self.page_query_param, self.page.next_page_number())
-        else:
-            next_link = None
-
-        if self.page.has_previous():
-            prev_link = replace_query_param(
-                self_link, self.page_query_param,
-                self.page.previous_page_number())
-        else:
-            prev_link = None
-
-        return response.Response(OrderedDict([
-            ('_links', OrderedDict([
-                ('self', dict(href=self_link)),
-                ('next', dict(href=next_link)),
-                ('previous', dict(href=prev_link)),
-            ])),
-            ('count', self.page.paginator.count),
-            ('results', data)
-        ]))
-
-
 class _DisabledHTMLFilterBackend(DjangoFilterBackend):
     """
     See https://github.com/tomchristie/django-rest-framework/issues/3766
-    This prevents DRF from generating the filter dropdowns (which can be HUGE in our case)
+    This prevents DRF from generating the filter dropdowns which can
+    be HUGE
     """
 
     def to_html(self, request, queryset, view):
