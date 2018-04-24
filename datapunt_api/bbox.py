@@ -11,7 +11,6 @@ BBOX = [52.03560, 4.58565,
         52.48769, 5.31360]
 
 
-
 def parse_xyr(value: str) -> (Point, int):
     """
     Parse x, y, radius input.
@@ -20,7 +19,7 @@ def parse_xyr(value: str) -> (Point, int):
         x, y, radius = value.split(',')
     except ValueError:
         raise ValidationError(
-            "Locatie must be rdx,rdy,radius or lat,long,radius"
+            "Locatie must be rdx,rdy,radius(m) or lat,long,radius(m)"
         )
 
     try:
@@ -58,7 +57,7 @@ def dist_to_deg(distance, latitude):
     corresponding to the given distance. At high latitudes, this will be too short N/S
     and too long E/W. It splits the errors between the two axes.
     Errors are < 25 percent for latitudes < 60 degrees N/S.
-    """
+    """  # noqa
     #   d * (180 / pi) / earthRadius   ==> degrees longitude
     #   (degrees longitude) / cos(latitude)  ==> degrees latitude
 

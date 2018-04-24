@@ -27,3 +27,8 @@ To use the API page styling provided by this package you must add it to the
 Django settings file in INSTALLED_APPS, ahead of 'rest_framework' so that the
 templates and static files included in drf_amsterdam override those included
 with Django REST Framework.
+
+Running tests
+-------------
+
+Run the tests in a virtualenv and run the script runtests.py from project root.
