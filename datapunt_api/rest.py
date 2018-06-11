@@ -35,3 +35,15 @@ class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
     renderer_classes = DEFAULT_RENDERERS
     pagination_class = HALPagination
     filter_backends = (_DisabledHTMLFilterBackend,)
+
+
+class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
+    """
+    ViewSet subclass for use in Datapunt APIs.
+
+    Note:
+    - this uses HAL JSON style pagination.
+    """
+    renderer_classes = DEFAULT_RENDERERS
+    pagination_class = HALPagination
+    filter_backends = (_DisabledHTMLFilterBackend,)
