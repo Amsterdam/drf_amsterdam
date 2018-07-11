@@ -3,6 +3,7 @@ from rest_framework import renderers
 from rest_framework_extensions.mixins import DetailSerializerMixin
 from django_filters.rest_framework import DjangoFilterBackend
 
+from .renderers import PaginatedCSVRenderer
 from .pagination import HALPagination
 from .serializers import (  # noqa: F401
     DisplayField, DataSetSerializerMixin, get_links,
@@ -10,8 +11,10 @@ from .serializers import (  # noqa: F401
     SelfLinkSerializerMixin
 )
 
-DEFAULT_RENDERERS = (renderers.JSONRenderer, renderers.BrowsableAPIRenderer)
-FORMATS = [dict(format=r.format, type=r.media_type) for r in DEFAULT_RENDERERS]
+DEFAULT_RENDERERS = (
+    renderers.JSONRenderer,
+    PaginatedCSVRenderer,
+    renderers.BrowsableAPIRenderer)
 
 
 class _DisabledHTMLFilterBackend(DjangoFilterBackend):
