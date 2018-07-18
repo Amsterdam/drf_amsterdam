@@ -1,7 +1,12 @@
+from django.conf import settings
 from rest_framework import viewsets
 from rest_framework import renderers
 from rest_framework_extensions.mixins import DetailSerializerMixin
 from django_filters.rest_framework import DjangoFilterBackend
+
+from rest_framework.settings import api_settings
+
+from rest_framework_xml.renderers import XMLRenderer
 
 from .renderers import PaginatedCSVRenderer
 from .pagination import HALPagination
@@ -11,10 +16,16 @@ from .serializers import (  # noqa: F401
     SelfLinkSerializerMixin
 )
 
-DEFAULT_RENDERERS = (
+DEFAULT_RENDERERS = [
     renderers.JSONRenderer,
     PaginatedCSVRenderer,
-    renderers.BrowsableAPIRenderer)
+    renderers.BrowsableAPIRenderer,
+    XMLRenderer,
+]
+
+
+if api_settings.DEFAULT_RENDERER_CLASSES:
+    DEFAULT_RENDERERS = api_settings.DEFAULT_RENDERER_CLASSES
 
 
 class _DisabledHTMLFilterBackend(DjangoFilterBackend):

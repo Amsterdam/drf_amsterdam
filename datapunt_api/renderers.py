@@ -1,8 +1,7 @@
-
 from rest_framework_csv.renderers import CSVRenderer
 
 
-class PaginatedCSVRenderer (CSVRenderer):
+class PaginatedCSVRenderer(CSVRenderer):
     results_field = 'results'
 
     def render(self, data, *args, **kwargs):
