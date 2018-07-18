@@ -11,7 +11,11 @@ setup(
     name='drf_amsterdam',
     version='0.1.2',
     packages=find_packages(),
-    requires=['djnagorestframework-csv', 'djangorestframework-xml'],
+    requires=[
+        'djangorestframework',
+        'drf_extensions',
+        'djangorestframework_csv',
+        'djangorestframework_xml'],
     include_package_data=True,
     license='Mozilla Public License Version 2.0',
     description='Amsterdam Datapunt code and style for Django REST Framework.',

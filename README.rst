@@ -14,13 +14,7 @@ Given that you have a Django project that generates a REST API using Django
 REST Framework:
 
 ```
-pip install git+https://github.com/Amsterdam/drf_amsterdam.git
-```
-
-or by adding the following line to your requirements.txt file:
-
-```
-git+https://github.com/Amsterdam/drf_amsterdam.git#egg=drf_amsterdam
+pip install drf_amsterdam
 ```
 
 To use the API page styling provided by this package you must add it to the
