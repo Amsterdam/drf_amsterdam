@@ -21,10 +21,10 @@ REST_FRAMEWORK = dict(
     MAX_PAGINATE_BY=100,
     DEFAULT_PAGINATION_CLASS='datapunt_api.pagination.HALPagination',
 
-    DEFAULT_RENDERER_CLASSES=(
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer'
-    ),
+    #DEFAULT_RENDERER_CLASSES=(
+    #    'rest_framework.renderers.JSONRenderer',
+    #    'rest_framework.renderers.BrowsableAPIRenderer'
+    #),
     DEFAULT_FILTER_BACKENDS=(
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
