@@ -9,11 +9,12 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='drf_amsterdam',
-    version='0.1.0',
+    version='0.1.2',
     packages=find_packages(),
+    requires=['djnagorestframework-csv', 'djangorestframework-xml'],
     include_package_data=True,
     license='Mozilla Public License Version 2.0',
-    description='Amsterdam Datapunt style REST API classes for Django REST Framework.',
+    description='Amsterdam Datapunt code and style for Django REST Framework.',
     long_description=README,
     author='Amsterdam Datapunt',
     author_email='datapunt@amsterdam.nl',
