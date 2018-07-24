@@ -1,9 +1,7 @@
-from rest_framework import viewsets
 from datapunt_api.rest import DatapuntViewSet
 
 from tests.models import WeatherStation
 from tests.models import TemperatureRecord
-
 from tests.serializers import WeatherStationSerializer
 from tests.serializers import TemperatureRecordSerializer
 

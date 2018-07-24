@@ -3,8 +3,7 @@ import json
 from django.test import TestCase
 from datetime import date
 
-from tests.serializers import (
-    WeatherStationSerializer, TemperatureRecordSerializer)
+from tests.serializers import TemperatureRecordSerializer
 from tests.models import WeatherStation, TemperatureRecord
 
 from rest_framework.test import APIClient
@@ -29,6 +28,7 @@ class TestDisplayFieldSerializer(ModelSerializer):
 
 
 class SerializerTest(TestCase):
+
     def setUp(self):
         ws = WeatherStation.objects.create(number=260)
         records = [

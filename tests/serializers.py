@@ -1,5 +1,4 @@
-from rest_framework import serializers
-from datapunt_api.rest import HALSerializer, SelfLinkSerializerMixin
+from datapunt_api.rest import HALSerializer
 
 from tests import models
 
