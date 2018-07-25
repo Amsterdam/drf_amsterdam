@@ -11,7 +11,7 @@ setup(
     name='drf_amsterdam',
     version='0.1.3',
     packages=find_packages(),
-    requires=[
+    install_requires=[
         'djangorestframework',
         'drf_extensions',
         'djangorestframework_csv',
