@@ -18,6 +18,13 @@ from datapunt_api.rest import DisplayField
 # factory = APIRequestFactory()
 # request = factory.get('/')
 
+FORMATS = [
+    ('api', 'text/html; charset=utf-8'),
+    ('json', 'application/json'),
+    ('xml', 'application/xml; charset=utf-8'),
+    ('csv', 'text/csv; charset=utf-8'),
+]
+
 
 class TestDisplayFieldSerializer(ModelSerializer):
     _display = DisplayField()
@@ -39,6 +46,23 @@ class SerializerTest(TestCase):
         for rs in records:
             TemperatureRecord.objects.create(**rs)
 
+    def valid_response(
+            self, url, response,
+            content_type='text/html; charset=utf-8'):
+        """
+        Helper method to check common status/json
+        """
+
+        self.assertEqual(
+            200, response.status_code, "Wrong response code for {}".format(url)
+        )
+
+        self.assertEqual(
+            f"{content_type}",
+            response["Content-Type"],
+            "Wrong Content-Type for {}".format(url),
+        )
+
     def test_active(self):
         self.assertTrue(True)
 
@@ -55,9 +79,26 @@ class SerializerTest(TestCase):
         response = c.get('/tests/')
         self.assertEqual(response.status_code, 200)
 
+    def test_formats(self):
+
+        c = APIClient()
+
+        for fmt, encoding in FORMATS:
+            url = '/tests/weatherstation/'
+            response = c.get(url, {'format': fmt})
+            self.valid_response(url, response, content_type=encoding)
+
+    def test_detailed(self):
+        c = APIClient()
+        url = '/tests/weatherstation/'
+        response = c.get(url, {'format': 'json', 'detailed': True})
+        self.valid_response(url, response, 'application/json')
+        data = response.json()
+        self.assertEqual(data['results'][0]['detailed'], 'I am detailed')
+
     def test_weatherstation_endpoint(self):
         c = APIClient()
-        response = c.get('/tests/weatherstation/', format='json')
+        response = c.get('/tests/weatherstation/', {'format': 'json'})
         self.assertEqual(response.status_code, 200)
         payload = json.loads(response.content)
 
@@ -66,7 +107,7 @@ class SerializerTest(TestCase):
         self.assertEqual(len(payload['results']), 1)
         self.assertEqual(
             payload['_links']['self']['href'],
-            'http://testserver/tests/weatherstation/'
+            'http://testserver/tests/weatherstation/?format=json'
         )
 
         # check that we can follow the link to the detail endpoint

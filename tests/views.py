@@ -3,12 +3,13 @@ from datapunt_api.rest import DatapuntViewSet
 from tests.models import WeatherStation
 from tests.models import TemperatureRecord
 from tests.serializers import WeatherStationSerializer
+from tests.serializers import WeatherDetailStationSerializer
 from tests.serializers import TemperatureRecordSerializer
 
 
 class WeatherStationViewSet(DatapuntViewSet):
     serializer_class = WeatherStationSerializer
-    serializer_detail_class = WeatherStationSerializer
+    serializer_detail_class = WeatherDetailStationSerializer
     queryset = WeatherStation.objects.all().order_by('id')
 
 
