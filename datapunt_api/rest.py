@@ -49,6 +49,14 @@ class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
     pagination_class = HALPagination
     filter_backends = (_DisabledHTMLFilterBackend,)
 
+    detailed_keyword = 'detailed'
+
+    def list(self, request, *args, **kwargs):
+        # Checking if a detailed response is required
+        if request.GET.get(self.detailed_keyword, False):
+            self.serializer_class = self.serializer_detail_class
+        return super().list(request, *args, **kwargs)
+
 
 class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
     """
