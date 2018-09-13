@@ -17,3 +17,7 @@ class TemperatureRecordViewSet(DatapuntViewSet):
     serializer_class = TemperatureRecordSerializer
     serializer_detail_class = TemperatureRecordSerializer
     queryset = TemperatureRecord.objects.all().order_by('date')
+
+    # test custom inheritance.
+    def list(self, request, *args, **kwargs):
+        return super().list(self, request, *args, **kwargs)

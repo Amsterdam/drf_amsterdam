@@ -79,6 +79,13 @@ class SerializerTest(TestCase):
         response = c.get('/tests/')
         self.assertEqual(response.status_code, 200)
 
+    def test_options_html(self):
+        c = APIClient()
+        response = c.options('/tests/')
+        self.assertEqual(response.status_code, 200)
+        response = c.options('/tests/weatherstation/')
+        self.assertEqual(response.status_code, 200)
+
     def test_formats(self):
 
         c = APIClient()
