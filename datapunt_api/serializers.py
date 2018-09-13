@@ -5,6 +5,7 @@ from collections import OrderedDict
 
 from rest_framework import serializers
 from rest_framework.reverse import reverse
+import json
 
 
 def get_links(view_name, kwargs=None, request=None):
@@ -97,3 +98,21 @@ class DisplayField(serializers.Field):
 
     def to_representation(self, value):
         return str(value)
+
+
+class MultipleGeometryField(serializers.Field):
+
+    read_only = True
+
+    def get_attribute(self, obj):
+        # Checking if point geometry exists. If not returning the
+        # regular multipoly geometry
+        return obj.geometrie
+
+    def to_representation(self, value):
+        # Serilaize the GeoField. Value could be either None,
+        # Point or MultiPoly
+        res = ''
+        if value:
+            res = json.loads(value.geojson)
+        return res

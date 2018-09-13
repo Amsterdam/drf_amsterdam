@@ -68,6 +68,26 @@ def dist_to_deg(distance, latitude):
     return (distance / (earthRadius * latitudeCorrection) * rad2deg)
 
 
+def determine_bbox(request):
+    """
+    Create a bounding box if it is given with the request.
+    """
+
+    err = "invalid bbox given"
+
+    if 'bbox' not in request.query_params:
+        # set default value
+        return BBOX, None
+
+    bboxp = request.query_params['bbox']
+    bbox, err = valid_bbox(bboxp)
+
+    if err:
+        return None, err
+
+    return bbox, err
+
+
 def valid_bbox(bboxp):
     """
     Check if bbox is a valid bounding box
