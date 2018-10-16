@@ -20,7 +20,7 @@ def get_links(view_name, kwargs=None, request=None):
 
 class DataSetSerializerMixin(object):
     def to_representation(self, obj):
-        result = super(obj).to_representation(obj)
+        result = super().to_representation(obj)
         result['dataset'] = self.dataset
         return result
 
@@ -110,7 +110,7 @@ class MultipleGeometryField(serializers.Field):
         return obj.geometrie
 
     def to_representation(self, value):
-        # Serilaize the GeoField. Value could be either None,
+        # Serialize the GeoField. Value could be either None,
         # Point or MultiPoly
         res = ''
         if value:

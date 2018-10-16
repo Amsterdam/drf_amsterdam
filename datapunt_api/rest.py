@@ -48,6 +48,8 @@ class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
     renderer_classes = DEFAULT_RENDERERS
     pagination_class = HALPagination
     filter_backends = (_DisabledHTMLFilterBackend,)
+    # TO restore filter box in your view!
+    # filter_backends = (DjangoFilterBackend,)
 
     detailed_keyword = 'detailed'
 
@@ -67,4 +69,5 @@ class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
     """
     renderer_classes = DEFAULT_RENDERERS
     pagination_class = HALPagination
+
     filter_backends = (_DisabledHTMLFilterBackend,)
