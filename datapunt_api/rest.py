@@ -38,6 +38,12 @@ class _DisabledHTMLFilterBackend(DjangoFilterBackend):
         return ""
 
 
+def _is_detailed_request(detailed_keyword, request):
+    value = request.GET.get(detailed_keyword, False)
+    if value and value in [1, '1', True, 'True', 'yes']:
+        return True
+
+
 class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """
     ViewSet subclass for use in Datapunt APIs.
@@ -50,12 +56,11 @@ class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
     filter_backends = (_DisabledHTMLFilterBackend,)
     # TO restore filter box in your view!
     # filter_backends = (DjangoFilterBackend,)
-
     detailed_keyword = 'detailed'
 
     def list(self, request, *args, **kwargs):
         # Checking if a detailed response is required
-        if request.GET.get(self.detailed_keyword, False):
+        if _is_detailed_request(self.detailed_keyword, request):
             self.serializer_class = self.serializer_detail_class
         return super().list(self, request, *args, **kwargs)
 
@@ -69,5 +74,12 @@ class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
     """
     renderer_classes = DEFAULT_RENDERERS
     pagination_class = HALPagination
-
     filter_backends = (_DisabledHTMLFilterBackend,)
+
+    detailed_keyword = 'detailed'
+
+    def list(self, request, *args, **kwargs):
+        # Checking if a detailed response is required
+        if _is_detailed_request(self.detailed_keyword, request):
+            self.serializer_class = self.serializer_detail_class
+        return super().list(self, request, *args, **kwargs)
