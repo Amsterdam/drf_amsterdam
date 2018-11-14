@@ -36,7 +36,7 @@ def parse_xyr(value: str) -> (Point, int):
     if y > 10:
         point = Point(x, y, srid=28992).transform(4326, clone=True)
     else:
-        point = Point(y, x, srid=4326)
+        point = Point(x, y, srid=4326)
 
     radius = dist_to_deg(radius, x)
     return point, radius
