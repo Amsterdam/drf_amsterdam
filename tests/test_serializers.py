@@ -10,6 +10,7 @@ from rest_framework.test import APIClient
 from rest_framework.serializers import ModelSerializer
 from datapunt_api.rest import DisplayField
 
+from django.contrib.gis.geos import Point
 # # fake requests
 # See: https://stackoverflow.com/questions/34438290/
 # from rest_framework.request import Request
@@ -27,17 +28,43 @@ FORMATS = [
 
 
 class TestDisplayFieldSerializer(ModelSerializer):
+    """Test display field."""
+
     _display = DisplayField()
 
-    class Meta:
+    class Meta:  # noqa
         model = WeatherStation
         fields = '__all__'
 
 
+BBOX = [52.03560, 4.58565,
+        52.48769, 5.31360]
+
+RD = [121357.68, 487342.57]
+
+
+def get_wgs_puntje():  # noqa
+    lat = BBOX[0]
+    lon = BBOX[1]
+    return Point(float(lat), float(lon))
+
+def get_rd_puntje(): # noqa
+    x = RD[0]
+    y = RD[1]
+    return Point(x, y, srid=28992)
+
+
 class SerializerTest(TestCase):
+    """test datapunt_api."""
 
     def setUp(self):
-        ws = WeatherStation.objects.create(number=260)
+        """Create some fake data."""
+        ws = WeatherStation.objects.create(
+            number=260,
+            centroid=get_wgs_puntje(),
+            centroid_rd=get_rd_puntje()
+        )
+
         records = [
             {'station': ws, 'date': date(1901, 1, 1), 'temperature': '10.0'},
             {'station': ws, 'date': date(1901, 2, 1), 'temperature': '11.0'},
@@ -49,10 +76,7 @@ class SerializerTest(TestCase):
     def valid_response(
             self, url, response,
             content_type='text/html; charset=utf-8'):
-        """
-        Helper method to check common status/json
-        """
-
+        """Help method to check common status/json."""
         self.assertEqual(
             200, response.status_code, "Wrong response code for {}".format(url)
         )
@@ -63,7 +87,32 @@ class SerializerTest(TestCase):
             "Wrong Content-Type for {}".format(url),
         )
 
-    def test_active(self):
+    def test_rd_filter(self):
+        location = "%s,%s,%s" % (
+            RD[0], RD[1], 6
+        )
+        params = {
+            location: location
+        }
+        c = APIClient()
+        url = '/tests/weatherstation/'
+        response = c.get(url, params=params)
+        self.valid_response(url, response, content_type='application/json')
+        self.assertEqual(len(response.json()['results']), 1)
+
+        location = "%s,%s,%s" % (
+            RD[1]+100, RD[0], 6
+        )
+
+        invalid_params = {location: location}
+
+        response = c.get(url, params=invalid_params)
+
+        self.assertEqual(
+            200, response.status_code, "Wrong response code for {}".format(url)
+        )
+
+    def test_active(self):  # noqa
         self.assertTrue(True)
 
     def test_cannot_serialize_without_request_context(self):

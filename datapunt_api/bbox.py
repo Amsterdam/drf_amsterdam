@@ -1,6 +1,5 @@
-"""
-Bounding box methods usefull for Amsterdam.
-"""
+"""Bounding box methods usefull for Amsterdam."""
+
 from math import pi, cos
 from django.contrib.gis.geos import Point
 from rest_framework.serializers import ValidationError
@@ -12,9 +11,7 @@ BBOX = [52.03560, 4.58565,
 
 
 def parse_xyr(value: str) -> (Point, int):
-    """
-    Parse x, y, radius input.
-    """
+    """Parse x, y, radius input."""
     try:
         x, y, radius = value.split(',')
     except ValueError:
@@ -36,17 +33,19 @@ def parse_xyr(value: str) -> (Point, int):
     if y > 10:
         point = Point(x, y, srid=28992).transform(4326, clone=True)
     else:
+        radius = dist_to_deg(radius, x)
         point = Point(x, y, srid=4326)
 
-    radius = dist_to_deg(radius, x)
     return point, radius
 
 
 def dist_to_deg(distance, latitude):
     """
-    distance = distance in meters
-    latitude = latitude in degrees
-    at the equator, the distance of one degree is equal in latitude and longitude.
+    Convert meters to degrees.
+
+    distance = distance in meters, latitude = latitude in degrees
+
+    At the equator, the distance of one degree is equal in latitude and longitude.
     at higher latitudes, a degree longitude is shorter in length, proportional to cos(latitude)
     http://en.wikipedia.org/wiki/Decimal_degrees
     This function is part of a distance filter where the database 'distance' is in degrees.
@@ -69,10 +68,7 @@ def dist_to_deg(distance, latitude):
 
 
 def determine_bbox(request):
-    """
-    Create a bounding box if it is given with the request.
-    """
-
+    """Create a bounding box if it is given with the request."""
     err = "invalid bbox given"
 
     if 'bbox' not in request.query_params:
@@ -88,9 +84,10 @@ def determine_bbox(request):
     return bbox, err
 
 
-def valid_bbox(bboxp):
-    """
-    Check if bbox is a valid bounding box
+def valid_bbox(bboxp, srid=4326):
+    """Check if bbox is a valid bounding box. (wgs84) for now.
+
+    TODO write tests.
     """
     bbox = bboxp.split(',')
     err = None
@@ -113,6 +110,14 @@ def valid_bbox(bboxp):
     lon_min = 4.58565
     lon_max = 5.31360
 
+    if srid == 28992:
+        # RD bbox from mapserver
+        # 94000 465000 170000 514000
+        lat_min = 465000
+        lat_max = 514000
+        lon_min = 94000
+        lon_max = 170000
+
     # check if coorinates are withing amsterdam
     # lat1, lon1, lat2, lon2 = bbox
 
@@ -132,6 +137,7 @@ def valid_bbox(bboxp):
         err = f"lon not within max bbox {lon_max} > {lon1} > {lon_min}"
 
     # this is how the code expects the bbox
-    bbox = [lat1, lon1, lat2, lon2]
+    # bbox = [lat1, lon1, lat2, lon2]
+    bbox = [lon1, lat1, lon2, lat2]
 
     return bbox, err

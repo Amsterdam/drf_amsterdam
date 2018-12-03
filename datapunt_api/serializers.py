@@ -2,7 +2,6 @@
 Serialization classes for Datapunt style Django REST Framework APIs.
 """
 from collections import OrderedDict
-
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 import json
@@ -19,6 +18,7 @@ def get_links(view_name, kwargs=None, request=None):
 
 
 class DataSetSerializerMixin(object):
+    """Add dataset field to indicate 'source' of this data."""
     def to_representation(self, obj):
         result = super().to_representation(obj)
         result['dataset'] = self.dataset

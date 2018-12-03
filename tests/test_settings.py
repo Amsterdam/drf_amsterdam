@@ -1,5 +1,6 @@
 SECRET_KEY = 'fake-key'
 INSTALLED_APPS = [
+    'django_filters',
     'datapunt_api',
     'rest_framework',
     'django.contrib.contenttypes',
@@ -9,10 +10,15 @@ INSTALLED_APPS = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': ':memory:',
     }
 }
+
+# SPATIALITE_LIBRARY_PATH='/usr/local/lib/mod_spatialite.so'
+# you might need to change that for you..
+SPATIALITE_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/mod_spatialite.so.7'
+
 
 ROOT_URLCONF = 'tests.base_urls'
 

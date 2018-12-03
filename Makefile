@@ -6,7 +6,7 @@ release: test
 	twine upload dist/*
 
 dist:
-	$(PYTHON) setup.py sdist bdist bdist_wheel
+	$(PYTHON) setup.py bdist bdist_wheel
 
 build:
 	$(PYTHON) setup.py build

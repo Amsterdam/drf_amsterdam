@@ -28,8 +28,8 @@ if api_settings.DEFAULT_RENDERER_CLASSES:
 
 
 class _DisabledHTMLFilterBackend(DjangoFilterBackend):
-    """
-    See https://github.com/tomchristie/django-rest-framework/issues/3766
+    """See https://github.com/tomchristie/django-rest-framework/issues/3766.
+
     This prevents DRF from generating the filter dropdowns (which can be HUGE
     in our case)
     """
@@ -45,12 +45,12 @@ def _is_detailed_request(detailed_keyword, request):
 
 
 class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
-    """
-    ViewSet subclass for use in Datapunt APIs.
+    """ViewSet subclass for use in Datapunt APIs.
 
     Note:
     - this uses HAL JSON style pagination.
     """
+
     renderer_classes = DEFAULT_RENDERERS
     pagination_class = HALPagination
     filter_backends = (_DisabledHTMLFilterBackend,)
@@ -62,16 +62,24 @@ class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
         # Checking if a detailed response is required
         if _is_detailed_request(self.detailed_keyword, request):
             self.serializer_class = self.serializer_detail_class
-        return super().list(self, request, *args, **kwargs)
+        return super(DatapuntViewSet, self).list(request, *args, **kwargs)
+
+    def get_renderer_context(self):
+        # make CSV select fields to render.
+        context = super(DatapuntViewSet, self).get_renderer_context()
+        context['header'] = (
+            self.request.GET['fields'].split(',')
+            if 'fields' in self.request.GET else None)
+        return context
 
 
 class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
-    """
-    ViewSet subclass for use in Datapunt APIs.
+    """ViewSet subclass for use in Datapunt APIs.
 
     Note:
     - this uses HAL JSON style pagination.
     """
+
     renderer_classes = DEFAULT_RENDERERS
     pagination_class = HALPagination
     filter_backends = (_DisabledHTMLFilterBackend,)
@@ -82,4 +90,4 @@ class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
         # Checking if a detailed response is required
         if _is_detailed_request(self.detailed_keyword, request):
             self.serializer_class = self.serializer_detail_class
-        return super().list(self, request, *args, **kwargs)
+        return super(DatapuntViewSet, self).list(request, *args, **kwargs)
