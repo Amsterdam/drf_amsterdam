@@ -4,9 +4,11 @@ from rest_framework.utils.urls import replace_query_param
 
 
 class HALPagination(pagination.PageNumberPagination):
+    """Implement HAL-JSON style pagination.
+
+    used on most rest Datapunt APIs.
     """
-    Implement HAL-JSON style pagination (standard for Datapunt APIs).
-    """
+
     page_size_query_param = 'page_size'
 
     def get_paginated_response(self, data):
@@ -34,5 +36,34 @@ class HALPagination(pagination.PageNumberPagination):
                 ('previous', dict(href=prev_link)),
             ])),
             ('count', self.page.paginator.count),
+            ('results', data)
+        ]))
+
+
+class HALCursorPagination(pagination.CursorPagination):
+    """Implement HAL-JSON Cursor style pagination.
+
+    standard for large datasets Datapunt APIs.
+    """
+    page_size_query_param = 'page_size'
+
+    def paginate_queryset(self, queryset, request, view=None):
+        self.count = queryset.count()
+        return super(HALCursorPagination, self).paginate_queryset(queryset, request, view=view)
+
+    def get_paginated_response(self, data):
+        self_link = self.base_url
+        if self_link.endswith(".api"):
+            self_link = self_link[:-4]
+
+        next_link = self.get_next_link()
+        previous_link = self.get_previous_link()
+
+        return response.Response(OrderedDict([
+            ('_links', OrderedDict([
+                ('next', dict(href=next_link)),
+                ('previous', dict(href=previous_link)),
+            ])),
+            ('count', self.count),
             ('results', data)
         ]))
