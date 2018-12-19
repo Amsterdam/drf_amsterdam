@@ -30,3 +30,11 @@ Run the tests in a virtualenv and run the script runtests.py from project root.
 requirements: spatialite, sqllite extension
 
 or user the docker-compose [TODO]
+
+Make Release
+------------
+
+use bumpversion [major, minor, patch] to tag the branch.
+
+make dist
+make release. passwords are in the passwords safes.
