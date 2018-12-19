@@ -46,9 +46,12 @@ class HALCursorPagination(pagination.CursorPagination):
     standard for large datasets Datapunt APIs.
     """
     page_size_query_param = 'page_size'
+    count_table = True
+    count = 0
 
     def paginate_queryset(self, queryset, request, view=None):
-        self.count = queryset.count()
+        if self.count_table:
+            self.count = queryset.count()
         return super(HALCursorPagination, self).paginate_queryset(queryset, request, view=view)
 
     def get_paginated_response(self, data):
@@ -59,11 +62,16 @@ class HALCursorPagination(pagination.CursorPagination):
         next_link = self.get_next_link()
         previous_link = self.get_previous_link()
 
-        return response.Response(OrderedDict([
+        _response = OrderedDict([
             ('_links', OrderedDict([
                 ('next', dict(href=next_link)),
                 ('previous', dict(href=previous_link)),
             ])),
             ('count', self.count),
             ('results', data)
-        ]))
+        ])
+
+        if not self.count_table:
+            _response.pop('count')
+
+        return response.Response(_response)
