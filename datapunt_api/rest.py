@@ -62,11 +62,11 @@ class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
         # Checking if a detailed response is required
         if _is_detailed_request(self.detailed_keyword, request):
             self.serializer_class = self.serializer_detail_class
-        return super(DatapuntViewSet, self).list(request, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
 
     def get_renderer_context(self):
         # make CSV select fields to render.
-        context = super(DatapuntViewSet, self).get_renderer_context()
+        context = super().get_renderer_context()
         context['header'] = (
             self.request.GET['fields'].split(',')
             if 'fields' in self.request.GET else None)
@@ -90,4 +90,4 @@ class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
         # Checking if a detailed response is required
         if _is_detailed_request(self.detailed_keyword, request):
             self.serializer_class = self.serializer_detail_class
-        return super(DatapuntViewSet, self).list(request, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
