@@ -12,3 +12,5 @@ pip-tools
 
 spatialite
 bumpversion
+wheel
+twine
