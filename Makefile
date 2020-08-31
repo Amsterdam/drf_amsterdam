@@ -1,7 +1,7 @@
 .PHONY: release dist build test coverage clean distclean
 
 PYTHON = python3
-DC = docker-compose
+DC = docker-compose run --rm
 
 release: test
 	$(PYTHON) -m twine upload dist/*
@@ -13,7 +13,7 @@ build:
 	$(PYTHON) setup.py build
 
 test:
-	$(DC) up tests
+	$(DC) tests
 
 pip-tools:
 	pip install pip-tools
