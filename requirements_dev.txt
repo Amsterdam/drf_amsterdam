@@ -5,6 +5,8 @@
 #    pip-compile --output-file=requirements_dev.txt requirements_dev.in
 #
 asgiref==3.2.10           # via -r ./requirements.txt, django
+bump2version==1.0.0       # via bumpversion
+bumpversion==0.6.0        # via -r requirements_dev.in
 click==7.1.2              # via pip-tools
 defusedxml==0.6.0         # via -r ./requirements.txt, djangorestframework-xml
 django-filter==2.3.0      # via -r ./requirements.txt
