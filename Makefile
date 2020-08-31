@@ -4,7 +4,7 @@ PYTHON = python3
 DC = docker-compose
 
 release: test
-	twine upload dist/*
+	$(PYTHON) -m twine upload dist/*
 
 dist:
 	$(PYTHON) setup.py bdist bdist_wheel
