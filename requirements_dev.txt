@@ -13,7 +13,7 @@ cffi==1.14.2              # via cryptography
 chardet==3.0.4            # via requests
 click==7.1.2              # via pip-tools
 colorama==0.4.3           # via twine
-cryptography==3.1         # via secretstorage
+cryptography==3.2         # via secretstorage
 defusedxml==0.6.0         # via -r ./requirements.txt, djangorestframework-xml
 django-filter==2.3.0      # via -r ./requirements.txt
 django-rest-framework==0.1.0  # via -r ./requirements.txt
