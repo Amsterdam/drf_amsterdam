@@ -15,14 +15,10 @@ build:
 test:
 	$(DC) tests
 
-pip-tools:
-	pip install pip-tools
+install:                            ## Install requirements and sync venv with expected state as defined in requirements.txt
+	pip install --upgrade -r requirements.txt -r requirements_dev.txt
 
-install: pip-tools                  ## Install requirements and sync venv with expected state as defined in requirements.txt
-	pip-sync requirements_dev.txt
-
-requirements: pip-tools             ## Upgrade requirements (in requirements.in) to latest versions and compile requirements.txt
-	pip-compile --upgrade --output-file requirements.txt requirements.in
-	pip-compile --upgrade --output-file requirements_dev.txt requirements_dev.in
+requirements:                       ## Not used
+	@echo "Make requirements is not used. This library does explicitly not pin its dependencies."
 
 upgrade: requirements install       ## Run 'requirements' and 'install' targets
