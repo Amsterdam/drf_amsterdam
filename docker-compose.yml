@@ -5,3 +5,5 @@ services:
     image: drf_amsterdam_test
     build:
       context: .
+    volumes:
+      - .:/app
