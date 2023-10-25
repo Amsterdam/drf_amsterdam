@@ -1,6 +1,6 @@
 """Bounding box methods useful for Amsterdam."""
 from math import pi, cos
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import GEOSGeometry, Point
 from rest_framework.serializers import ValidationError
 
 # A BBOX, or "bounding box," is a rectangular area used to define a specific
@@ -18,7 +18,7 @@ from rest_framework.serializers import ValidationError
 BBOX = [52.03560, 4.58565, 52.48769, 5.31360]
 
 
-def parse_xyr(value: str) -> tuple[Point, int]:
+def parse_xyr(value: str) -> tuple[GEOSGeometry, float]:
     """
     Parse x, y, radius input.
 
@@ -30,7 +30,7 @@ def parse_xyr(value: str) -> tuple[Point, int]:
     """
     # Split the input string into three parts: x, y, and radius.
     try:
-        x, y, radius = value.split(',')
+        x_str, y_str, radius_str = value.split(',')
     except ValueError:
         raise ValidationError(
             "Locatie must be rdx,rdy,radius(m) or lat,long,radius(m)"
@@ -38,9 +38,9 @@ def parse_xyr(value: str) -> tuple[Point, int]:
 
     # Try converting the input strings to floats.
     try:
-        x = float(x)
-        y = float(y)
-        radius = float(radius)
+        x = float(x_str)
+        y = float(y_str)
+        radius = float(radius_str)
     except ValueError:
         raise ValidationError(
             "Locatie must be x: float, y: float, r: int"
