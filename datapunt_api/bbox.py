@@ -1,6 +1,7 @@
 """Bounding box methods useful for Amsterdam."""
 from math import pi, cos
 from django.contrib.gis.geos import GEOSGeometry, Point
+from rest_framework.request import Request
 from rest_framework.serializers import ValidationError
 
 # A BBOX, or "bounding box," is a rectangular area used to define a specific
@@ -92,7 +93,7 @@ def dist_to_deg(distance: float, latitude: float) -> float:
     return distance / (earth_radius * latitude_correction) * rad2deg
 
 
-def determine_bbox(request) -> (list[float] | None, str | None):
+def determine_bbox(request: Request) -> tuple[list[float] | None, str | None]:
     """
     Create a bounding box if it is given with the request.
     Returns the default bounding box if the bbox query parameter is found in the request.
