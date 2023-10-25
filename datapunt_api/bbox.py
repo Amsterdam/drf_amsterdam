@@ -118,7 +118,7 @@ def determine_bbox(request: Request) -> tuple[list[float] | None, str | None]:
     return bbox, err
 
 
-def valid_bbox(bboxp: str, srid: int = 4326) -> (list[float] | None, str | None):
+def valid_bbox(bboxp: str, srid: int = 4326) -> tuple[list[float], str | None]:
     """
     Check if bbox is a valid bounding box. (wgs84) for now.
 
@@ -130,16 +130,16 @@ def valid_bbox(bboxp: str, srid: int = 4326) -> (list[float] | None, str | None)
         The bounding box and error message. The bounding box is a list of four coordinates
         [min_lon, min_lat, max_lon, max_lat]. The error message is a string or None.
     """
-    bbox = bboxp.split(',')
+    bbox_str = bboxp.split(',')
     err = None
 
     # check if we got 4 parameters
-    if not len(bbox) == 4:
+    if len(bbox_str) != 4:
         return [], "wrong numer of arguments (lon, lat, lon, lat)"
 
     # check if we got floats
     try:
-        bbox = [float(f) for f in bbox]
+        bbox = [float(f) for f in bbox_str]
     except ValueError:
         return [], "Did not receive floats"
 
