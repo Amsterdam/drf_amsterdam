@@ -2,10 +2,8 @@ version: '3.0'
 services:
 
   tests:
-    build: .
-    environment:
-      DATABASE_NAME: test
-      DATABASE_USER: test
-      DATABASE_PASSWORD: insecure
-      ENVIRONMENT: test
-    command: make test
+    image: drf_amsterdam_test
+    build:
+      context: .
+    volumes:
+      - .:/app

@@ -1,7 +1,14 @@
-FROM amsterdam/python
+FROM python:3.11-slim
 
-RUN apt-get install -y spatialite-bin libsqlite3-mod-spatialite
+RUN set -eux; \
+    apt-get update -yqq; \
+    apt-get install -y \
+      spatialite-bin \
+      libsqlite3-mod-spatialite \
+      gdal-bin
+
 COPY . /app/
-RUN pip install -r /app/requirements.txt
 
 WORKDIR /app/
+
+RUN pip install --upgrade -r requirements.txt -r requirements_dev.txt
