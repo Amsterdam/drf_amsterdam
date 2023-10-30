@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build container image
-        run: docker build -t drf_amsterdam_test .
+        run: docker-compose build
 
       - name: Run tests
-        run: docker run --rm drf_amsterdam_test python runtests.py
+        run: docker-compose run --rm tests python runtests.py
