@@ -30,7 +30,7 @@ or use docker-compose:
 
 ```shell
 docker-compose build
-docker-compose run --rm tests pytest
+docker-compose run --rm tests pytest --cov
 ```
 
 ## Make Release
