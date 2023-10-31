@@ -3,6 +3,7 @@ import json
 from django.test import TestCase
 from datetime import date
 
+from datapunt_api.serializers import get_links
 from tests.serializers import TemperatureRecordSerializer
 from tests.models import WeatherStation, TemperatureRecord
 
@@ -199,3 +200,10 @@ class SerializerTest(TestCase):
             serializer.data['_display'],
             'DISPLAY FIELD CONTENT'
         )
+
+    def test_get_links(self):
+        links = get_links('weatherstation-list')
+        link_self = links.get('self')
+
+        self.assertIsNotNone(link_self)
+        self.assertEqual(link_self.get('href'), '/tests/weatherstation/')
