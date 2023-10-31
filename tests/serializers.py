@@ -1,12 +1,21 @@
 from datapunt_api.rest import HALSerializer
 from rest_framework import serializers
 
+from datapunt_api.serializers import DataSetSerializerMixin
 from tests import models
 
 
 class WeatherStationSerializer(HALSerializer):
     class Meta:
         model = models.WeatherStation
+        fields = '__all__'
+
+
+class DatasetSerializer(DataSetSerializerMixin, HALSerializer):
+    dataset = 'test_dataset'
+
+    class Meta:
+        model = models.SimpleModel
         fields = '__all__'
 
 

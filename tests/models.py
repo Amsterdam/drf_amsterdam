@@ -1,5 +1,6 @@
 """Test models."""
 from django.contrib.gis.db import models
+from rest_framework import serializers
 
 
 class WeatherStation(models.Model):  # noqa
@@ -19,3 +20,8 @@ class TemperatureRecord(models.Model):  # noqa
     station = models.ForeignKey(WeatherStation, on_delete=models.CASCADE)
     date = models.DateField()
     temperature = models.DecimalField(decimal_places=3, max_digits=6)
+
+class SimpleModel(models.Model):
+    name = serializers.CharField(max_length=25)
+    age = serializers.IntegerField()
+    sign = serializers.CharField(max_length=25)

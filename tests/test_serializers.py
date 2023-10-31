@@ -4,8 +4,8 @@ from django.test import TestCase
 from datetime import date
 
 from datapunt_api.serializers import get_links
-from tests.serializers import TemperatureRecordSerializer
-from tests.models import WeatherStation, TemperatureRecord
+from tests.serializers import DatasetSerializer, TemperatureRecordSerializer
+from tests.models import WeatherStation, TemperatureRecord, SimpleModel
 
 from rest_framework.test import APIClient
 from rest_framework.serializers import ModelSerializer
@@ -201,9 +201,19 @@ class SerializerTest(TestCase):
             'DISPLAY FIELD CONTENT'
         )
 
-    def test_get_links(self):
+    def test_get_links(self) -> None:
         links = get_links('weatherstation-list')
         link_self = links.get('self')
 
         self.assertIsNotNone(link_self)
         self.assertEqual(link_self.get('href'), '/tests/weatherstation/')
+
+    def test_dataset_serializer_list(self) -> None:
+        simple_1 = SimpleModel()
+        simple_1.name = 'Name1'
+        simple_1.age = 13
+        simple_1.sign = '++'
+
+        serializer = DatasetSerializer(simple_1)
+        dataset = serializer.data.get('dataset')
+        self.assertEqual(dataset, serializer.dataset)
