@@ -1,5 +1,6 @@
 spatialite
 bumpversion
+pytest-cov
 pytest-django
 wheel
 twine
