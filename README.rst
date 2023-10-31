@@ -28,7 +28,12 @@ Run the tests in a virtualenv and run the script runtests.py from project root.
 
 requirements: spatialite, sqlite extension
 
-or user the docker-compose [TODO]
+or use docker-compose:
+
+.. code-block:: sh
+    docker-compose build
+    docker-compose run --rm tests pytest
+
 
 Make Release
 ------------
