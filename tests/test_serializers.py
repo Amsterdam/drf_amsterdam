@@ -208,12 +208,12 @@ class SerializerTest(TestCase):
         self.assertIsNotNone(link_self)
         self.assertEqual(link_self.get('href'), '/tests/weatherstation/')
 
-    def test_dataset_serializer_list(self) -> None:
-        simple_1 = SimpleModel()
-        simple_1.name = 'Name1'
-        simple_1.age = 13
-        simple_1.sign = '++'
+    def test_dataset_serializer(self) -> None:
+        simple = SimpleModel()
+        simple.name = 'Name1'
+        simple.age = 13
+        simple.sign = '++'
 
-        serializer = DatasetSerializer(simple_1)
+        serializer = DatasetSerializer(simple)
         dataset = serializer.data.get('dataset')
         self.assertEqual(dataset, serializer.dataset)
