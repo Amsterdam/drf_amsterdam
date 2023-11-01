@@ -217,3 +217,22 @@ class SerializerTest(TestCase):
         serializer = DatasetSerializer(simple)
         dataset = serializer.data.get('dataset')
         self.assertEqual(dataset, serializer.dataset)
+
+    def test_self_links_serializer(self) -> None:
+        simple = SimpleModel()
+        simple.name = 'Name1'
+        simple.age = 13
+        simple.sign = '++'
+        simple.save()
+
+        client = APIClient()
+        response = client.get('/tests/simple/', format='json')
+
+        body = response.json()
+        results = body.get('results')
+        self.assertIsNotNone(results)
+        self.assertEqual(results[0].get('_links'), {
+            'self': {
+                'href': 'http://testserver/tests/simple/1/'
+            }
+        })

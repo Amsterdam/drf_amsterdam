@@ -1,7 +1,9 @@
+from rest_framework.serializers import ModelSerializer
+
 from datapunt_api.rest import HALSerializer
 from rest_framework import serializers
 
-from datapunt_api.serializers import DataSetSerializerMixin
+from datapunt_api.serializers import DataSetSerializerMixin, SelfLinkSerializerMixin
 from tests import models
 
 
@@ -13,6 +15,14 @@ class WeatherStationSerializer(HALSerializer):
 
 class DatasetSerializer(DataSetSerializerMixin, HALSerializer):
     dataset = 'test_dataset'
+
+    class Meta:
+        model = models.SimpleModel
+        fields = '__all__'
+
+
+class SelfLinksSerializer(SelfLinkSerializerMixin, ModelSerializer):
+    _links = serializers.SerializerMethodField()
 
     class Meta:
         model = models.SimpleModel

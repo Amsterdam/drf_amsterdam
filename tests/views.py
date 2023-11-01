@@ -3,14 +3,15 @@ from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from datapunt_api.rest import DatapuntViewSet
 from datapunt_api import bbox
 
 
-from tests.models import WeatherStation
+from tests.models import WeatherStation, SimpleModel
 from tests.models import TemperatureRecord
-from tests.serializers import WeatherStationSerializer
+from tests.serializers import WeatherStationSerializer, SelfLinksSerializer
 from tests.serializers import WeatherDetailStationSerializer
 from tests.serializers import TemperatureRecordSerializer
 
@@ -69,3 +70,8 @@ class TemperatureRecordViewSet(DatapuntViewSet): # noqa
     # test custom inheritance.
     def list(self, request, *args, **kwargs):  # noqa
         return super().list(self, request, *args, **kwargs)
+
+
+class SimpleViewSet(ReadOnlyModelViewSet):
+    serializer_class = SelfLinksSerializer
+    queryset = SimpleModel.objects.all()
