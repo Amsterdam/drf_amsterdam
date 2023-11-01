@@ -1,4 +1,5 @@
 SECRET_KEY = 'fake-key'
+USE_TZ = False
 INSTALLED_APPS = [
     'django_filters',
     'datapunt_api',

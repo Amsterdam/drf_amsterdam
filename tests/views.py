@@ -71,15 +71,15 @@ class TemperatureRecordViewSet(DatapuntViewSet): # noqa
 
 
 class SimpleViewSet(ReadOnlyModelViewSet):
+    queryset = SimpleModel.objects.all().order_by('id')
     serializer_class = SelfLinksSerializer
-    queryset = SimpleModel.objects.all()
 
 
 class ThingViewSet(ReadOnlyModelViewSet):
-    queryset = Thing.objects.all()
+    queryset = Thing.objects.all().order_by('id')
     serializer_class = ThingSerializer
 
 
 class PersonViewSet(ReadOnlyModelViewSet):
-    queryset = Person.objects.all()
+    queryset = Person.objects.all().order_by('id')
     serializer_class = PersonSerializer
