@@ -5,7 +5,7 @@ from datetime import date
 
 from datapunt_api.serializers import get_links
 from tests.serializers import DatasetSerializer, DisplayFieldSerializer, TemperatureRecordSerializer
-from tests.models import WeatherStation, TemperatureRecord, SimpleModel
+from tests.models import WeatherStation, TemperatureRecord, SimpleModel, Thing, Person
 
 from rest_framework.test import APIClient
 
@@ -221,5 +221,29 @@ class SerializerTest(TestCase):
         self.assertEqual(results[0].get('_links'), {
             'self': {
                 'href': 'http://testserver/tests/simple/1/'
+            }
+        })
+
+    def test_related_summary_field(self) -> None:
+        fokje = Person()
+        fokje.name = 'Fokje'
+        fokje.save()
+
+        modder = Thing()
+        modder.name = 'modder'
+        modder.person = fokje
+        modder.save()
+
+        client = APIClient()
+        response = client.get('/tests/person/', format='json')
+
+        body = response.json()
+        results = body.get('results')
+        self.assertIsNotNone(results)
+        self.assertEqual(results[0], {
+            'id': 1,
+            'things': {
+                'count': 1,
+                'href': 'http://testserver/tests/thing/?person=1'
             }
         })

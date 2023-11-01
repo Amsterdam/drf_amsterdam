@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from .views import WeatherStationViewSet
+from .views import WeatherStationViewSet, ThingViewSet, PersonViewSet
 from .views import SimpleViewSet
 from .views import TemperatureRecordViewSet
 
@@ -33,5 +33,7 @@ router = ApiRouter()
 router.register('weatherstation', WeatherStationViewSet)
 router.register('temperature_record', TemperatureRecordViewSet)
 router.register('simple', SimpleViewSet)
+router.register('thing', ThingViewSet)
+router.register('person', PersonViewSet)
 
 urlpatterns = router.urls

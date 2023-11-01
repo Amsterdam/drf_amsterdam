@@ -1,5 +1,6 @@
 """Test models."""
 from django.contrib.gis.db import models
+from django.db.models import ForeignKey
 from rest_framework import serializers
 
 
@@ -21,7 +22,16 @@ class TemperatureRecord(models.Model):  # noqa
     date = models.DateField()
     temperature = models.DecimalField(decimal_places=3, max_digits=6)
 
+
 class SimpleModel(models.Model):
     name = serializers.CharField(max_length=25)
     age = serializers.IntegerField()
     sign = serializers.CharField(max_length=25)
+
+
+class Person(models.Model):
+    name = serializers.CharField(max_length=255)
+
+class Thing(models.Model):
+    name = serializers.CharField(max_length=128)
+    person = ForeignKey(Person, related_name='things', on_delete=models.DO_NOTHING)

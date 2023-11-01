@@ -9,9 +9,9 @@ from datapunt_api.rest import DatapuntViewSet
 from datapunt_api import bbox
 
 
-from tests.models import WeatherStation, SimpleModel
+from tests.models import WeatherStation, SimpleModel, Thing, Person
 from tests.models import TemperatureRecord
-from tests.serializers import WeatherStationSerializer, SelfLinksSerializer
+from tests.serializers import WeatherStationSerializer, SelfLinksSerializer, ThingSerializer, PersonSerializer
 from tests.serializers import WeatherDetailStationSerializer
 from tests.serializers import TemperatureRecordSerializer
 
@@ -75,3 +75,13 @@ class TemperatureRecordViewSet(DatapuntViewSet): # noqa
 class SimpleViewSet(ReadOnlyModelViewSet):
     serializer_class = SelfLinksSerializer
     queryset = SimpleModel.objects.all()
+
+
+class ThingViewSet(ReadOnlyModelViewSet):
+    queryset = Thing.objects.all()
+    serializer_class = ThingSerializer
+
+
+class PersonViewSet(ReadOnlyModelViewSet):
+    queryset = Person.objects.all()
+    serializer_class = PersonSerializer

@@ -3,7 +3,12 @@ from rest_framework.serializers import ModelSerializer
 from datapunt_api.rest import HALSerializer
 from rest_framework import serializers
 
-from datapunt_api.serializers import DataSetSerializerMixin, DisplayField, SelfLinkSerializerMixin
+from datapunt_api.serializers import (
+    DataSetSerializerMixin,
+    DisplayField,
+    RelatedSummaryField,
+    SelfLinkSerializerMixin
+)
 from tests import models
 
 class WeatherStationSerializer(HALSerializer):
@@ -55,4 +60,17 @@ class DisplayFieldSerializer(ModelSerializer):
 
     class Meta:  # noqa
         model = models.WeatherStation
+        fields = '__all__'
+
+
+class ThingSerializer(ModelSerializer):
+    class Meta:
+        model = models.Thing
+        fields = '__all__'
+
+
+class PersonSerializer(ModelSerializer):
+    things = RelatedSummaryField()
+    class Meta:
+        model = models.Person
         fields = '__all__'
