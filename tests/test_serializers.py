@@ -184,7 +184,7 @@ class SerializerTest(TestCase):
     def test_display_field(self):
         ws = WeatherStation.objects.get(number__exact=260)
         serializer = DisplayFieldSerializer(ws)
-        self.assertEquals(
+        self.assertEqual(
             serializer.data['_display'],
             'DISPLAY FIELD CONTENT'
         )
