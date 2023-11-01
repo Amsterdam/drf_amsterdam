@@ -1,16 +1,16 @@
 import json
-
-from django.test import TestCase
 from datetime import date
 
-from tests.serializers import TemperatureRecordSerializer
-from tests.models import WeatherStation, TemperatureRecord
-
-from rest_framework.test import APIClient
-from rest_framework.serializers import ModelSerializer
-from datapunt_api.rest import DisplayField
-
 from django.contrib.gis.geos import Point
+from django.test import TestCase
+from rest_framework.test import APIClient
+
+from datapunt_api.serializers import get_links
+from tests.models import (Location, Person, SimpleModel, TemperatureRecord,
+                          Thing, WeatherStation)
+from tests.serializers import (DatasetSerializer, DisplayFieldSerializer,
+                               LocationSerializer, TemperatureRecordSerializer)
+
 # # fake requests
 # See: https://stackoverflow.com/questions/34438290/
 # from rest_framework.request import Request
@@ -25,17 +25,6 @@ FORMATS = [
     ('xml', 'application/xml; charset=utf-8'),
     ('csv', 'text/csv; charset=utf-8'),
 ]
-
-
-class TestDisplayFieldSerializer(ModelSerializer):
-    """Test display field."""
-
-    _display = DisplayField()
-
-    class Meta:  # noqa
-        model = WeatherStation
-        fields = '__all__'
-
 
 BBOX = [52.03560, 4.58565,
         52.48769, 5.31360]
@@ -194,8 +183,79 @@ class SerializerTest(TestCase):
 
     def test_display_field(self):
         ws = WeatherStation.objects.get(number__exact=260)
-        serializer = TestDisplayFieldSerializer(ws)
+        serializer = DisplayFieldSerializer(ws)
         self.assertEquals(
             serializer.data['_display'],
             'DISPLAY FIELD CONTENT'
         )
+
+    def test_get_links(self) -> None:
+        links = get_links('weatherstation-list')
+        link_self = links.get('self')
+
+        self.assertIsNotNone(link_self)
+        self.assertEqual(link_self.get('href'), '/tests/weatherstation/')
+
+    def test_dataset_serializer(self) -> None:
+        simple = SimpleModel()
+        simple.name = 'Name1'
+        simple.age = 13
+        simple.sign = '++'
+
+        serializer = DatasetSerializer(simple)
+        dataset = serializer.data.get('dataset')
+        self.assertEqual(dataset, serializer.dataset)
+
+    def test_self_links_serializer(self) -> None:
+        simple = SimpleModel()
+        simple.name = 'Name1'
+        simple.age = 13
+        simple.sign = '++'
+        simple.save()
+
+        client = APIClient()
+        response = client.get('/tests/simple/', format='json')
+
+        body = response.json()
+        results = body.get('results')
+        self.assertIsNotNone(results)
+        self.assertEqual(results[0].get('_links'), {
+            'self': {
+                'href': 'http://testserver/tests/simple/1/'
+            }
+        })
+
+    def test_related_summary_field(self) -> None:
+        fokje = Person()
+        fokje.name = 'Fokje'
+        fokje.save()
+
+        modder = Thing()
+        modder.name = 'modder'
+        modder.person = fokje
+        modder.save()
+
+        client = APIClient()
+        response = client.get('/tests/person/', format='json')
+
+        body = response.json()
+        results = body.get('results')
+        self.assertIsNotNone(results)
+        self.assertEqual(results[0], {
+            'id': 1,
+            'things': {
+                'count': 1,
+                'href': 'http://testserver/tests/thing/?person=1'
+            }
+        })
+
+    def test_multiple_geometry_field(self) -> None:
+        location = Location()
+        location.geometrie = Point(5, 23)
+
+        serializer = LocationSerializer(location)
+
+        self.assertEqual(serializer.data.get('geometrie'), {
+            'type': 'Point',
+            'coordinates': [5.0, 23.0]
+        })

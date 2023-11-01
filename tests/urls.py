@@ -1,7 +1,7 @@
 from rest_framework import routers
 
-from .views import WeatherStationViewSet
-from .views import TemperatureRecordViewSet
+from .views import (PersonViewSet, SimpleViewSet, TemperatureRecordViewSet,
+                    ThingViewSet, WeatherStationViewSet)
 
 
 class ClimateAPI(routers.APIRootView):
@@ -31,5 +31,8 @@ class ApiRouter(routers.DefaultRouter):
 router = ApiRouter()
 router.register('weatherstation', WeatherStationViewSet)
 router.register('temperature_record', TemperatureRecordViewSet)
+router.register('simple', SimpleViewSet)
+router.register('thing', ThingViewSet)
+router.register('person', PersonViewSet)
 
 urlpatterns = router.urls
