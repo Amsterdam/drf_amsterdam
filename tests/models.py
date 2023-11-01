@@ -1,5 +1,6 @@
 """Test models."""
 from django.contrib.gis.db import models
+from django.contrib.gis.db.models import PointField
 from django.db.models import ForeignKey
 from rest_framework import serializers
 
@@ -35,3 +36,7 @@ class Person(models.Model):
 class Thing(models.Model):
     name = serializers.CharField(max_length=128)
     person = ForeignKey(Person, related_name='things', on_delete=models.DO_NOTHING)
+
+
+class Location(models.Model):
+    geometrie = PointField(srid=28992)

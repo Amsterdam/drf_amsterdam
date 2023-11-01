@@ -7,7 +7,8 @@ from datapunt_api.serializers import (
     DataSetSerializerMixin,
     DisplayField,
     RelatedSummaryField,
-    SelfLinkSerializerMixin
+    SelfLinkSerializerMixin,
+    MultipleGeometryField
 )
 from tests import models
 
@@ -73,4 +74,11 @@ class PersonSerializer(ModelSerializer):
     things = RelatedSummaryField()
     class Meta:
         model = models.Person
+        fields = '__all__'
+
+
+class LocationSerializer(ModelSerializer):
+    geometrie = MultipleGeometryField()
+    class Meta:
+        model = models.Location
         fields = '__all__'

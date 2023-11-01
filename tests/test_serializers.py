@@ -4,8 +4,8 @@ from django.test import TestCase
 from datetime import date
 
 from datapunt_api.serializers import get_links
-from tests.serializers import DatasetSerializer, DisplayFieldSerializer, TemperatureRecordSerializer
-from tests.models import WeatherStation, TemperatureRecord, SimpleModel, Thing, Person
+from tests.serializers import DatasetSerializer, DisplayFieldSerializer, TemperatureRecordSerializer, LocationSerializer
+from tests.models import WeatherStation, TemperatureRecord, SimpleModel, Thing, Person, Location
 
 from rest_framework.test import APIClient
 
@@ -246,4 +246,15 @@ class SerializerTest(TestCase):
                 'count': 1,
                 'href': 'http://testserver/tests/thing/?person=1'
             }
+        })
+
+    def test_multiple_geometry_field(self) -> None:
+        location = Location()
+        location.geometrie = Point(5, 23)
+
+        serializer = LocationSerializer(location)
+
+        self.assertEqual(serializer.data.get('geometrie'), {
+            'type': 'Point',
+            'coordinates': [5.0, 23.0]
         })
