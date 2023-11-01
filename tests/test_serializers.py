@@ -4,12 +4,10 @@ from django.test import TestCase
 from datetime import date
 
 from datapunt_api.serializers import get_links
-from tests.serializers import DatasetSerializer, TemperatureRecordSerializer
+from tests.serializers import DatasetSerializer, DisplayFieldSerializer, TemperatureRecordSerializer
 from tests.models import WeatherStation, TemperatureRecord, SimpleModel
 
 from rest_framework.test import APIClient
-from rest_framework.serializers import ModelSerializer
-from datapunt_api.rest import DisplayField
 
 from django.contrib.gis.geos import Point
 # # fake requests
@@ -26,17 +24,6 @@ FORMATS = [
     ('xml', 'application/xml; charset=utf-8'),
     ('csv', 'text/csv; charset=utf-8'),
 ]
-
-
-class TestDisplayFieldSerializer(ModelSerializer):
-    """Test display field."""
-
-    _display = DisplayField()
-
-    class Meta:  # noqa
-        model = WeatherStation
-        fields = '__all__'
-
 
 BBOX = [52.03560, 4.58565,
         52.48769, 5.31360]
@@ -195,7 +182,7 @@ class SerializerTest(TestCase):
 
     def test_display_field(self):
         ws = WeatherStation.objects.get(number__exact=260)
-        serializer = TestDisplayFieldSerializer(ws)
+        serializer = DisplayFieldSerializer(ws)
         self.assertEquals(
             serializer.data['_display'],
             'DISPLAY FIELD CONTENT'
