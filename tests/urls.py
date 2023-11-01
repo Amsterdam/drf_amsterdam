@@ -1,8 +1,7 @@
 from rest_framework import routers
 
-from .views import WeatherStationViewSet, ThingViewSet, PersonViewSet
-from .views import SimpleViewSet
-from .views import TemperatureRecordViewSet
+from .views import (PersonViewSet, SimpleViewSet, TemperatureRecordViewSet,
+                    ThingViewSet, WeatherStationViewSet)
 
 
 class ClimateAPI(routers.APIRootView):

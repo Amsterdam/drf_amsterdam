@@ -1,15 +1,16 @@
 import json
-
-from django.test import TestCase
 from datetime import date
 
-from datapunt_api.serializers import get_links
-from tests.serializers import DatasetSerializer, DisplayFieldSerializer, TemperatureRecordSerializer, LocationSerializer
-from tests.models import WeatherStation, TemperatureRecord, SimpleModel, Thing, Person, Location
-
+from django.contrib.gis.geos import Point
+from django.test import TestCase
 from rest_framework.test import APIClient
 
-from django.contrib.gis.geos import Point
+from datapunt_api.serializers import get_links
+from tests.models import (Location, Person, SimpleModel, TemperatureRecord,
+                          Thing, WeatherStation)
+from tests.serializers import (DatasetSerializer, DisplayFieldSerializer,
+                               LocationSerializer, TemperatureRecordSerializer)
+
 # # fake requests
 # See: https://stackoverflow.com/questions/34438290/
 # from rest_framework.request import Request

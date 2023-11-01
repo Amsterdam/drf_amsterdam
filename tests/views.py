@@ -1,19 +1,17 @@
 """Test views."""
-from django_filters.rest_framework import FilterSet
-from django_filters.rest_framework import filters
+from django_filters.rest_framework import (DjangoFilterBackend, FilterSet,
+                                           filters)
 from rest_framework.filters import OrderingFilter
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from datapunt_api.rest import DatapuntViewSet
 from datapunt_api import bbox
-
-
-from tests.models import WeatherStation, SimpleModel, Thing, Person
-from tests.models import TemperatureRecord
-from tests.serializers import WeatherStationSerializer, SelfLinksSerializer, ThingSerializer, PersonSerializer
-from tests.serializers import WeatherDetailStationSerializer
-from tests.serializers import TemperatureRecordSerializer
+from datapunt_api.rest import DatapuntViewSet
+from tests.models import (Person, SimpleModel, TemperatureRecord, Thing,
+                          WeatherStation)
+from tests.serializers import (PersonSerializer, SelfLinksSerializer,
+                               TemperatureRecordSerializer, ThingSerializer,
+                               WeatherDetailStationSerializer,
+                               WeatherStationSerializer)
 
 
 class WeatherFilter(FilterSet):

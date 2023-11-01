@@ -33,6 +33,7 @@ class SimpleModel(models.Model):
 class Person(models.Model):
     name = serializers.CharField(max_length=255)
 
+
 class Thing(models.Model):
     name = serializers.CharField(max_length=128)
     person = ForeignKey(Person, related_name='things', on_delete=models.DO_NOTHING)
