@@ -16,4 +16,4 @@ jobs:
         run: docker-compose build
 
       - name: Run tests
-        run: docker-compose run --rm tests python runtests.py
+        run: docker-compose run --rm tests pytest --cov --cov-fail-under=51
