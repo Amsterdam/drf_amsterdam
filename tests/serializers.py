@@ -81,3 +81,15 @@ class LocationSerializer(ModelSerializer):
     class Meta:
         model = models.Location
         fields = '__all__'
+
+
+class DetailedPersonSerializer(ModelSerializer):
+    things = RelatedSummaryField()
+    detailed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = models.Person
+        fields = '__all__'
+
+    def get_detailed(self, obj: models.Person) -> str:
+        return "Yes, detailed isn't it?"

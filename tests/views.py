@@ -5,13 +5,13 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from datapunt_api import bbox
-from datapunt_api.rest import DatapuntViewSet
+from datapunt_api.rest import DatapuntViewSet, DatapuntViewSetWritable
 from tests.models import (Person, SimpleModel, TemperatureRecord, Thing,
                           WeatherStation)
 from tests.serializers import (PersonSerializer, SelfLinksSerializer,
                                TemperatureRecordSerializer, ThingSerializer,
                                WeatherDetailStationSerializer,
-                               WeatherStationSerializer)
+                               WeatherStationSerializer, DetailedPersonSerializer)
 
 
 class WeatherFilter(FilterSet):
@@ -80,6 +80,7 @@ class ThingViewSet(ReadOnlyModelViewSet):
     serializer_class = ThingSerializer
 
 
-class PersonViewSet(ReadOnlyModelViewSet):
+class PersonViewSet(DatapuntViewSetWritable):
     queryset = Person.objects.all().order_by('id')
     serializer_class = PersonSerializer
+    serializer_detail_class = DetailedPersonSerializer
