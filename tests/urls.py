@@ -34,5 +34,6 @@ router.register('temperature_record', TemperatureRecordViewSet)
 router.register('simple', SimpleViewSet)
 router.register('thing', ThingViewSet)
 router.register('person', PersonViewSet)
+router.register('person.api', PersonViewSet)
 
 urlpatterns = router.urls
