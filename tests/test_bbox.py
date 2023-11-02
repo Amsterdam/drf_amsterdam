@@ -1,7 +1,10 @@
 from unittest.mock import Mock
 
+from django.contrib.gis.geos import Point
 from django.test import TestCase
-from datapunt_api.bbox import BBOX, determine_bbox, valid_bbox, dist_to_deg
+from rest_framework.exceptions import ValidationError
+
+from datapunt_api.bbox import BBOX, determine_bbox, valid_bbox, dist_to_deg, parse_xyr
 
 
 class ValidBboxTestCase(TestCase):
@@ -170,3 +173,39 @@ class DistanceToDegreeTestCase(TestCase):
 
         result = dist_to_deg(distance, lat)
         self.assertAlmostEqual(result, expected_output, places=8)  # Allowing for some rounding error
+
+
+class ParseXYRTestCase(TestCase):
+    def test_valid_input_srid(self):
+        input_string = '52.03560,4.58565,45.0'
+        expected_point = Point(x=52.03560, y=4.58565, srid=4326)
+
+        point, radius = parse_xyr(input_string)
+        self.assertEqual(point, expected_point)
+        self.assertAlmostEqual(radius, 0.00050055, places=8)  # Allowing for some rounding error
+
+    def test_valid_input_srid_28992(self):
+        input_string = '123456.789,987654.321,45.0'
+        expected_point = Point(x=123456.789, y=987654.321, srid=28992).transform(ct=4326, clone=True)
+
+        point, radius = parse_xyr(input_string)
+        self.assertEqual(point, expected_point)
+        self.assertEqual(radius, 45.0)
+
+    def test_invalid_input_missing_radius(self):
+        # Test with invalid input format: "12.34,56.78" (missing radius)
+        input_string = "12.34,56.78"
+        with self.assertRaises(ValidationError):
+            parse_xyr(input_string)
+
+    def test_invalid_input_type(self):
+        # Test with input containing non-numeric values: "12.34,invalid,100"
+        input_string = "12.34,invalid,100"
+        with self.assertRaises(ValidationError):
+            parse_xyr(input_string)
+
+    def test_invalid_input_type_radius(self):
+        # Test with invalid radius type (should be a float): "12.34,56.78,invalid"
+        input_string = "12.34,56.78,invalid"
+        with self.assertRaises(ValidationError):
+            parse_xyr(input_string)
