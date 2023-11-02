@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 from datapunt_api.rest import HALSerializer
-from datapunt_api.serializers import (DataSetSerializerMixin, DisplayField,
+from datapunt_api.serializers import (BaseDataSetSerializer, DisplayField,
                                       MultipleGeometryField,
                                       RelatedSummaryField,
                                       SelfLinkSerializerMixin)
@@ -15,7 +15,7 @@ class WeatherStationSerializer(HALSerializer):
         fields = '__all__'
 
 
-class DatasetSerializer(DataSetSerializerMixin, HALSerializer):
+class DatasetSerializer(BaseDataSetSerializer, HALSerializer):
     dataset = 'test_dataset'
 
     class Meta:

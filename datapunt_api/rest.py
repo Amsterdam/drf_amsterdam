@@ -18,7 +18,7 @@ from rest_framework_xml.renderers import XMLRenderer
 from .renderers import PaginatedCSVRenderer
 from .pagination import HALPagination
 from .serializers import (  # noqa: F401
-    DisplayField, DataSetSerializerMixin, get_links,
+    DisplayField, get_links,
     HALSerializer, LinksField, RelatedSummaryField,
     SelfLinkSerializerMixin
 )

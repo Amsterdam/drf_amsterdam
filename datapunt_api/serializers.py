@@ -2,7 +2,7 @@
 Serialization classes for Datapunt style Django REST Framework APIs.
 """
 from collections import OrderedDict
-from typing import Any, Mapping
+from typing import Any, Mapping, TypeVar
 
 from django.db.models import Model
 from django.http import HttpRequest
@@ -10,6 +10,10 @@ from rest_framework import serializers
 from rest_framework.relations import RelatedField
 from rest_framework.reverse import reverse
 import json
+
+from rest_framework.serializers import BaseSerializer
+
+_IN = TypeVar("_IN")
 
 
 def get_links(
@@ -26,9 +30,11 @@ def get_links(
     return result
 
 
-class DataSetSerializerMixin:
+class BaseDataSetSerializer(BaseSerializer[_IN]):
     """Add dataset field to indicate 'source' of this data."""
-    def to_representation(self, obj):
+    dataset: str
+
+    def to_representation(self, obj: _IN) -> dict[str, Any]:
         result = super().to_representation(obj)
         result['dataset'] = self.dataset
         return result
