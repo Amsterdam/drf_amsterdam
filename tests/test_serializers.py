@@ -259,3 +259,28 @@ class SerializerTest(TestCase):
             'type': 'Point',
             'coordinates': [5.0, 23.0]
         })
+
+    def test_detailed_serializer(self) -> None:
+        fokje = Person()
+        fokje.name = 'Fokje'
+        fokje.save()
+
+        modder = Thing()
+        modder.name = 'modder'
+        modder.person = fokje
+        modder.save()
+
+        client = APIClient()
+        response = client.get(f'/tests/person/?detailed=True', format='json')
+
+        body = response.json()
+        results = body.get('results')
+        self.assertIsNotNone(results)
+        self.assertEqual(results[0], {
+            'detailed': "Yes, detailed isn't it?",
+            'id': 1,
+            'things': {
+                'count': 1,
+                'href': 'http://testserver/tests/thing/?person=1'
+            }
+        })
