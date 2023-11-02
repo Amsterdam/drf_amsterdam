@@ -8,6 +8,7 @@ from django.db.models import Model
 from django.http import HttpRequest
 from rest_framework import serializers
 from rest_framework.relations import RelatedField
+from rest_framework.request import Request
 from rest_framework.reverse import reverse
 import json
 
@@ -44,6 +45,8 @@ class LinksField(serializers.HyperlinkedIdentityField):
 
     def to_representation(self, value):
         request = self.context.get('request')
+        assert isinstance(request, Request)
+        assert self.view_name is not None
 
         result = OrderedDict([
             ('self', dict(
