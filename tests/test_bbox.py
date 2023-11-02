@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
 from django.test import TestCase
-from datapunt_api.bbox import BBOX, determine_bbox, valid_bbox
+from datapunt_api.bbox import BBOX, determine_bbox, valid_bbox, dist_to_deg
 
 
 class ValidBboxTestCase(TestCase):
@@ -136,3 +136,37 @@ class DetermineBboxTestCase(TestCase):
         bbox, err = determine_bbox(request)
         self.assertIsNone(bbox)
         self.assertEqual(err, "Did not receive floats")
+
+
+class DistanceToDegreeTestCase(TestCase):
+    def test_distance_lat_0(self):
+        lat = 0.0
+        distance = 1000
+        expected_output = 0.00898312
+
+        result = dist_to_deg(distance, lat)
+        self.assertAlmostEqual(result, expected_output, places=8)  # Allowing for some rounding error
+
+    def test_distance_lat_45(self):
+        lat = 45.0
+        distance = 500
+        expected_output = 0.00526219
+
+        result = dist_to_deg(distance, lat)
+        self.assertAlmostEqual(result, expected_output, places=8)  # Allowing for some rounding error
+
+    def test_distance_lat_minus_75(self):
+        lat = -75.0
+        distance = 1264
+        expected_output = 0.01804019
+
+        result = dist_to_deg(distance, lat)
+        self.assertAlmostEqual(result, expected_output, places=8)  # Allowing for some rounding error
+
+    def test_distance_lat_53_25367(self):
+        lat = 52.25367
+        distance = 80
+        expected_output = 0.000891532
+
+        result = dist_to_deg(distance, lat)
+        self.assertAlmostEqual(result, expected_output, places=8)  # Allowing for some rounding error
