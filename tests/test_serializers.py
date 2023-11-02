@@ -284,3 +284,9 @@ class SerializerTest(TestCase):
                 'href': 'http://testserver/tests/thing/?person=1'
             }
         })
+
+    def test_view_with__DisabledHTMLFilterBackend(self):
+        client = APIClient()
+        response = client.get('/tests/weatherstation/')
+
+        self.assertNotIn('<select', response.content.decode('utf-8'))
