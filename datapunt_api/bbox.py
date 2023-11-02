@@ -1,17 +1,34 @@
-"""Bounding box methods usefull for Amsterdam."""
-
+"""Bounding box methods useful for Amsterdam."""
 from math import pi, cos
 from django.contrib.gis.geos import Point
 from rest_framework.serializers import ValidationError
 
-# Default amstermdam bbox lon, lat, lon, lat
-# square around Amsterdam.
-BBOX = [52.03560, 4.58565,
-        52.48769, 5.31360]
+# A BBOX, or "bounding box," is a rectangular area used to define a specific
+# object, area, or geographic location on a map. It is defined by the
+# coordinates of two opposite corners: the lower-left corner (minimum values)
+# and the upper-right corner (maximum values).
+#
+# The BBOX coordinates are as follows:
+#
+# Lower-left corner (minimum values): [52.03560, 4.58565]
+# Upper-right corner (maximum values): [52.48769, 5.31360]
+#
+# This bounding box encompasses the geographic region of Amsterdam in the
+# Netherlands in the format [min_lon, min_lat, max_lon, max_lat]
+BBOX = [52.03560, 4.58565, 52.48769, 5.31360]
 
 
 def parse_xyr(value: str) -> (Point, int):
-    """Parse x, y, radius input."""
+    """
+    Parse x, y, radius input.
+
+    Args:
+        value: A string containing the x, y, and radius inputs, separated by commas.
+
+    Returns:
+        A tuple of a Point object and a radius, in meters.
+    """
+    # Split the input string into three parts: x, y, and radius.
     try:
         x, y, radius = value.split(',')
     except ValueError:
@@ -19,8 +36,8 @@ def parse_xyr(value: str) -> (Point, int):
             "Locatie must be rdx,rdy,radius(m) or lat,long,radius(m)"
         )
 
+    # Try converting the input strings to floats.
     try:
-        # Converting , to . and then to float
         x = float(x)
         y = float(y)
         radius = float(radius)
@@ -29,7 +46,7 @@ def parse_xyr(value: str) -> (Point, int):
             "Locatie must be x: float, y: float, r: int"
         )
 
-    # Checking if the given coords are in RD, otherwise converting
+    # Check if the given coordinates are in RD. If they are not, convert them to WGS84.
     if y > 10:
         point = Point(x, y, srid=28992).transform(4326, clone=True)
     else:
@@ -39,24 +56,31 @@ def parse_xyr(value: str) -> (Point, int):
     return point, radius
 
 
-def dist_to_deg(distance, latitude):
+def dist_to_deg(distance: int, latitude: float) -> float:
     """
     Convert meters to degrees.
 
     distance = distance in meters, latitude = latitude in degrees
 
     At the equator, the distance of one degree is equal in latitude and longitude.
-    at higher latitudes, a degree longitude is shorter in length, proportional to cos(latitude)
+    at higher latitudes, a degree longitude is shorter (in length), proportional to cos(latitude)
     http://en.wikipedia.org/wiki/Decimal_degrees
     This function is part of a distance filter where the database 'distance' is in degrees.
     There's no good single-valued answer to this problem.
     The distance/ degree is quite constant N/S around the earth (latitude),
     but varies over a huge range E/W (longitude).
-    Split the difference: I'm going to average the the degrees latitude and degrees longitude
+    Split the difference: I'm going to average the degrees latitude and degrees longitude
     corresponding to the given distance. At high latitudes, this will be too short N/S
     and too long E/W. It splits the errors between the two axes.
     Errors are < 25 percent for latitudes < 60 degrees N/S.
-    """  # noqa
+
+    Args:
+        distance: The distance in meters.
+        latitude: The latitude in degrees.
+
+    Returns:
+        The distance in degrees.
+    """
     #   d * (180 / pi) / earthRadius   ==> degrees longitude
     #   (degrees longitude) / cos(latitude)  ==> degrees latitude
 
@@ -67,12 +91,20 @@ def dist_to_deg(distance, latitude):
     return (distance / (earthRadius * latitudeCorrection) * rad2deg)
 
 
-def determine_bbox(request):
-    """Create a bounding box if it is given with the request."""
-    err = "invalid bbox given"
+def determine_bbox(request) -> (list[float] | None, str | None):
+    """
+    Create a bounding box if it is given with the request.
+    Returns the default bounding box if the bbox query parameter is found in the request.
 
+    Args:
+        request: A web request object.
+
+    Returns:
+        The bounding box and error message. The bounding box is a list of four coordinates
+        [min_lon, min_lat, max_lon, max_lat]. The error message is a string or None.
+    """
     if 'bbox' not in request.query_params:
-        # set default value
+        # Return the default bounding box if no bounding box is found in the request.
         return BBOX, None
 
     bboxp = request.query_params['bbox']
@@ -84,15 +116,22 @@ def determine_bbox(request):
     return bbox, err
 
 
-def valid_bbox(bboxp, srid=4326):
-    """Check if bbox is a valid bounding box. (wgs84) for now.
+def valid_bbox(bboxp: str, srid: int = 4326) -> (list[float] | None, str | None):
+    """
+    Check if bbox is a valid bounding box. (wgs84) for now.
 
-    TODO write tests.
+    Args:
+        bboxp: A string containing the bounding box coordinates, in the format "min_lon,min_lat,max_lon,max_lat".
+        srid: The spatial reference system of the bounding box.
+
+    Returns:
+        The bounding box and error message. The bounding box is a list of four coordinates
+        [min_lon, min_lat, max_lon, max_lat]. The error message is a string or None.
     """
     bbox = bboxp.split(',')
     err = None
 
-    # check if we got 4 parametes
+    # check if we got 4 parameters
     if not len(bbox) == 4:
         return [], "wrong numer of arguments (lon, lat, lon, lat)"
 
@@ -100,7 +139,7 @@ def valid_bbox(bboxp, srid=4326):
     try:
         bbox = [float(f) for f in bbox]
     except ValueError:
-        return [], "Did not recieve floats"
+        return [], "Did not receive floats"
 
     # max bbox sizes from mapserver
     # RD  EXTENT      100000    450000   150000 500000
@@ -118,9 +157,6 @@ def valid_bbox(bboxp, srid=4326):
         lon_min = 94000
         lon_max = 170000
 
-    # check if coorinates are withing amsterdam
-    # lat1, lon1, lat2, lon2 = bbox
-
     # bbox given by leaflet
     lon1, lat1, lon2, lat2 = bbox
 
@@ -136,8 +172,5 @@ def valid_bbox(bboxp, srid=4326):
     if not lon_max >= lon1 >= lon_min:
         err = f"lon not within max bbox {lon_max} > {lon1} > {lon_min}"
 
-    # this is how the code expects the bbox
-    # bbox = [lat1, lon1, lat2, lon2]
     bbox = [lon1, lat1, lon2, lat2]
-
     return bbox, err
