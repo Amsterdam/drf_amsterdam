@@ -5,7 +5,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from datapunt_api import bbox
-from datapunt_api.rest import DatapuntViewSet, DatapuntViewSetWritable
+from datapunt_api.rest import DatapuntViewSet, DatapuntViewSetWritable, _DisabledHTMLFilterBackend
 from tests.models import (Person, SimpleModel, TemperatureRecord, Thing,
                           WeatherStation)
 from tests.serializers import (PersonSerializer, SelfLinksSerializer,
@@ -53,6 +53,7 @@ class WeatherStationViewSet(DatapuntViewSet):  # noqa
     filter_class = WeatherFilter
 
     filter_backends = (
+        _DisabledHTMLFilterBackend,
         DjangoFilterBackend,
         OrderingFilter
     )
