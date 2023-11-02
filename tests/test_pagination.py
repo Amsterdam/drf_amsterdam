@@ -7,9 +7,9 @@ from tests.models import Person
 class HALPaginationTest(TestCase):
     def setUp(self):
         for x in range(10):
-            fokje = Person()
-            fokje.name = f'person #{x}'
-            fokje.save()
+            person = Person()
+            person.name = f'person #{x}'
+            person.save()
 
     def test_pagination_one_page(self):
         client = APIClient()
