@@ -63,7 +63,7 @@ class HALSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class BaseSelfLinkSerializer(BaseSerializer[_IN]):
-    def get__links(self, obj):
+    def get__links(self, obj: Model) -> dict[str, dict[str, str]]:
         """
         Serialization of _links field for detail view (assumes ModelViewSet).
 
