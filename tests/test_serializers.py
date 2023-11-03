@@ -243,6 +243,7 @@ class SerializerTest(TestCase):
         self.assertIsNotNone(results)
         self.assertEqual(results[0], {
             'id': 1,
+            'name': 'Fokje',
             'things': {
                 'count': 1,
                 'href': 'http://testserver/tests/thing/?person=1'
@@ -276,13 +277,15 @@ class SerializerTest(TestCase):
         body = response.json()
         results = body.get('results')
         self.assertIsNotNone(results)
+
         self.assertEqual(results[0], {
-            'detailed': "Yes, detailed isn't it?",
             'id': 1,
+            'name': 'Fokje',
             'things': {
                 'count': 1,
                 'href': 'http://testserver/tests/thing/?person=1'
-            }
+            },
+            'detailed': "Yes, detailed isn't it?"
         })
 
     def test_view_with__DisabledHTMLFilterBackend(self):
