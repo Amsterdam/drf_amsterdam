@@ -55,10 +55,6 @@ class HALCursorPagination(pagination.CursorPagination):
         return super(HALCursorPagination, self).paginate_queryset(queryset, request, view=view)
 
     def get_paginated_response(self, data):
-        self_link = self.base_url
-        if self_link.endswith(".api"):
-            self_link = self_link[:-4]
-
         next_link = self.get_next_link()
         previous_link = self.get_previous_link()
 
