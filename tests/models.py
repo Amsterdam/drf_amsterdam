@@ -1,8 +1,6 @@
 """Test models."""
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import PointField
-from django.db.models import ForeignKey
-from rest_framework import serializers
 
 
 class WeatherStation(models.Model):  # noqa
@@ -25,18 +23,18 @@ class TemperatureRecord(models.Model):  # noqa
 
 
 class SimpleModel(models.Model):
-    name = serializers.CharField(max_length=25)
-    age = serializers.IntegerField()
-    sign = serializers.CharField(max_length=25)
+    name = models.CharField(max_length=25)
+    age = models.IntegerField()
+    sign = models.CharField(max_length=25)
 
 
 class Person(models.Model):
-    name = serializers.CharField(max_length=255)
+    name = models.CharField(max_length=255)
 
 
 class Thing(models.Model):
-    name = serializers.CharField(max_length=128)
-    person = ForeignKey(Person, related_name='things', on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=128)
+    person = models.ForeignKey(Person, related_name='things', on_delete=models.DO_NOTHING)
 
 
 class Location(models.Model):
