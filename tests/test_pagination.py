@@ -47,3 +47,5 @@ class HALPaginationTest(TestCase):
         response = client.get('/tests/person.api', format='json')
 
         self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.data['_links']['self']['href'], 'http://testserver/tests/person.api')
+        self.assertEqual(response.data['_links']['self']['href'], 'http://testserver/tests/person')
