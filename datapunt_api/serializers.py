@@ -12,8 +12,6 @@ from rest_framework.request import Request
 from rest_framework.reverse import reverse
 import json
 
-from rest_framework.serializers import BaseSerializer
-
 _IN = TypeVar("_IN")
 
 
@@ -31,7 +29,7 @@ def get_links(
     return result
 
 
-class BaseDataSetSerializer(BaseSerializer[_IN]):
+class DataSetSerializerMixin(serializers.BaseSerializer[_IN]):
     """Add dataset field to indicate 'source' of this data."""
     dataset: str
 
@@ -62,7 +60,7 @@ class HALSerializer(serializers.HyperlinkedModelSerializer):
     serializer_url_field: type[RelatedField] = LinksField
 
 
-class BaseSelfLinkSerializer(BaseSerializer[_IN]):
+class SelfLinkSerializerMixin(serializers.BaseSerializer[_IN]):
     def get__links(self, obj: Model) -> dict[str, dict[str, str]]:
         """
         Serialization of _links field for detail view (assumes ModelViewSet).

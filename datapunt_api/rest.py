@@ -20,7 +20,7 @@ from .pagination import HALPagination
 from .serializers import (  # noqa: F401
     DisplayField, get_links,
     HALSerializer, LinksField, RelatedSummaryField,
-    BaseSelfLinkSerializer
+    SelfLinkSerializerMixin
 )
 
 DEFAULT_RENDERERS: list[type[BaseRenderer]] = [
