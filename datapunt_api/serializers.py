@@ -62,8 +62,7 @@ class HALSerializer(serializers.HyperlinkedModelSerializer):
     serializer_url_field: type[RelatedField] = LinksField
 
 
-# TODO: check that this is needed (vs just using the HALSerializer above).
-class SelfLinkSerializerMixin:
+class BaseSelfLinkSerializer(BaseSerializer[_IN]):
     def get__links(self, obj):
         """
         Serialization of _links field for detail view (assumes ModelViewSet).

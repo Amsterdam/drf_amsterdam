@@ -5,7 +5,7 @@ from datapunt_api.rest import HALSerializer
 from datapunt_api.serializers import (BaseDataSetSerializer, DisplayField,
                                       MultipleGeometryField,
                                       RelatedSummaryField,
-                                      SelfLinkSerializerMixin)
+                                      BaseSelfLinkSerializer)
 from tests import models
 
 
@@ -23,7 +23,7 @@ class DatasetSerializer(BaseDataSetSerializer, HALSerializer):
         fields = '__all__'
 
 
-class SelfLinksSerializer(SelfLinkSerializerMixin, ModelSerializer):
+class SelfLinksSerializer(BaseSelfLinkSerializer, ModelSerializer):
     _links = serializers.SerializerMethodField()
 
     class Meta:
