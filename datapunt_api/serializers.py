@@ -75,11 +75,9 @@ class LinksField(LinksFieldBase):
             kwargs = {self.lookup_url_kwarg: lookup_value}
             href = reverse(self.view_name, kwargs=kwargs, request=request, format=None)
 
-        return {
-            'self': {
-                'href': href
-            }
-        }
+        return OrderedDict([('self', {
+            'href': href
+        })])
 
 
 class HALSerializer(serializers.HyperlinkedModelSerializer):
