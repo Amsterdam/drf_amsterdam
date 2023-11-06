@@ -2,7 +2,7 @@
 Serialization classes for Datapunt style Django REST Framework APIs.
 """
 from collections import OrderedDict
-from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Callable
+from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Callable, Generic
 
 from django.db.models import Model
 from django.http import HttpRequest
@@ -41,12 +41,12 @@ class DataSetSerializerMixin(serializers.BaseSerializer[_IN]):
 
 
 if TYPE_CHECKING:
-    LinksFieldBase = serializers.RelatedField[_MT, str, dict[str, dict[str, str | None]]]
+    class BaseLinksField(serializers.RelatedField[_MT, str, dict[str, dict[str, str | None]]]): pass
 else:
-    LinksFieldBase = serializers.RelatedField
+    class BaseLinksField(Generic[_MT], serializers.RelatedField): pass
 
 
-class LinksField(LinksFieldBase):
+class LinksField(BaseLinksField[_MT]):
     lookup_field: str = 'pk'
     lookup_url_kwarg: str
     view_name: str | None = None
