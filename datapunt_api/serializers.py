@@ -2,7 +2,7 @@
 Serialization classes for Datapunt style Django REST Framework APIs.
 """
 from collections import OrderedDict
-from typing import Any, Mapping, TypeVar
+from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Callable
 
 from django.db.models import Model
 from django.http import HttpRequest
@@ -13,6 +13,7 @@ from rest_framework.reverse import reverse
 import json
 
 _IN = TypeVar("_IN")
+_MT = TypeVar("_MT", bound=Model)
 
 
 def get_links(
@@ -39,20 +40,46 @@ class DataSetSerializerMixin(serializers.BaseSerializer[_IN]):
         return result
 
 
-class LinksField(serializers.HyperlinkedIdentityField):
+if TYPE_CHECKING:
+    LinksFieldBase = serializers.RelatedField[_MT, str, dict[str, dict[str, str | None]]]
+else:
+    LinksFieldBase = serializers.RelatedField
 
-    def to_representation(self, value):
+
+class LinksField(LinksFieldBase):
+    lookup_field: str = 'pk'
+    lookup_url_kwarg: str
+    view_name: str | None = None
+
+    def __init__(self, view_name: str | None = None, **kwargs):
+        if view_name is not None:
+            self.view_name = view_name
+        assert self.view_name is not None, 'The `view_name` argument is required.'
+        self.lookup_field = kwargs.pop('lookup_field', self.lookup_field)
+        self.lookup_url_kwarg = kwargs.pop('lookup_url_kwarg', self.lookup_field)
+
+        kwargs['read_only'] = True
+        kwargs['source'] = '*'
+
+        super().__init__(**kwargs)
+
+    def to_representation(self, value: _MT) -> dict[str, dict[str, str | None]]:
         request = self.context.get('request')
         assert isinstance(request, Request)
         assert self.view_name is not None
 
-        result = OrderedDict([
-            ('self', dict(
-                href=self.get_url(value, self.view_name, request, None))
-             ),
-        ])
+        if hasattr(value, 'pk') and value.pk in (None, ''):
+            href = None
+        else:
+            lookup_value = getattr(value, self.lookup_field)
+            kwargs = {self.lookup_url_kwarg: lookup_value}
+            href = reverse(self.view_name, kwargs=kwargs, request=request, format=None)
 
-        return result
+        return {
+            'self': {
+                'href': href
+            }
+        }
 
 
 class HALSerializer(serializers.HyperlinkedModelSerializer):
