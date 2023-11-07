@@ -2,7 +2,7 @@
 Serialization classes for Datapunt style Django REST Framework APIs.
 """
 from collections import OrderedDict
-from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Generic
+from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Generic, TypedDict
 
 from django.contrib.gis.geos import Point, Polygon, MultiPolygon
 from django.db.models import Model
@@ -145,15 +145,18 @@ class DisplayField(BaseDisplayField[_MT]):
         return str(value)
 
 
+class GeoJson(TypedDict):
+    type: str
+    coordinates: list[float] | list[list[list[float]]] | list[list[list[list[float]]]]
+
+
 class MultipleGeometryField(serializers.Field):
     read_only: bool = True
 
     def get_attribute(self, obj):
-        # Checking if point geometry exists. If not returning the
-        # regular multipoly geometry
         return obj.geometrie
 
-    def to_representation(self, value: Point | Polygon | MultiPolygon) -> dict | list | str | int | float | bool | None:
+    def to_representation(self, value: Point | Polygon | MultiPolygon | None) -> str | GeoJson:
         res = ''
         if value:
             res = json.loads(value.geojson)
