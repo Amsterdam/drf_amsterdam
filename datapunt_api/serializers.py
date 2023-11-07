@@ -155,10 +155,23 @@ class GeoJson(TypedDict):
     coordinates: list[float] | list[list[list[float]]] | list[list[list[list[float]]]]
 
 
-class MultipleGeometryField(serializers.Field):
+
+class BaseMultipleGeometry:
+    """Extend this class when you plan to use the serializer field below."""
+    geometrie: Point | Polygon | MultiPolygon | None
+
+
+if TYPE_CHECKING:
+    BaseMultipleGeometryField =\
+        serializers.Field[Point | Polygon | MultiPolygon | None, GeoJson, str | GeoJson, BaseMultipleGeometry]
+else:
+    BaseMultipleGeometryField = serializers.Field
+
+
+class MultipleGeometryField(BaseMultipleGeometryField):
     read_only: bool = True
 
-    def get_attribute(self, obj):
+    def get_attribute(self, obj: BaseMultipleGeometry) -> Point | Polygon | MultiPolygon | None:
         return obj.geometrie
 
     def to_representation(self, value: Point | Polygon | MultiPolygon | None) -> str | GeoJson:
