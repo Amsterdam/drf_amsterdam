@@ -2,12 +2,11 @@
 Serialization classes for Datapunt style Django REST Framework APIs.
 """
 from collections import OrderedDict
-from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Callable, Generic
+from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Generic
 
 from django.db.models import Model
 from django.http import HttpRequest
 from rest_framework import serializers
-from rest_framework.relations import RelatedField
 from rest_framework.request import Request
 from rest_framework.reverse import reverse
 import json
@@ -82,7 +81,7 @@ class LinksField(BaseLinksField[_MT]):
 
 class HALSerializer(serializers.HyperlinkedModelSerializer):
     url_field_name: str = '_links'
-    serializer_url_field: type[RelatedField] = LinksField
+    serializer_url_field: type[serializers.RelatedField] = LinksField
 
 
 class SelfLinkSerializerMixin(serializers.BaseSerializer[_IN]):
