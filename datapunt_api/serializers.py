@@ -4,6 +4,7 @@ Serialization classes for Datapunt style Django REST Framework APIs.
 from collections import OrderedDict
 from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Generic
 
+from django.contrib.gis.geos import Point, Polygon, MultiPolygon
 from django.db.models import Model
 from django.http import HttpRequest
 from rest_framework import serializers
@@ -113,10 +114,10 @@ class RelatedSummaryField(serializers.Field):
         parent_pk = value.instance.pk
         filter_name = list(value.core_filters.keys())[0]
 
-        return dict(
-            count=count,
-            href="{}?{}={}".format(url, filter_name, parent_pk),
-        )
+        return {
+            'count': count,
+            'href': f'{url}?{filter_name}={parent_pk}',
+        }
 
 
 # Note about DisplayField below; setting source to '*' causes the
@@ -152,9 +153,7 @@ class MultipleGeometryField(serializers.Field):
         # regular multipoly geometry
         return obj.geometrie
 
-    def to_representation(self, value) -> dict | list | str | int | float | bool | None:
-        # Serialize the GeoField. Value could be either None,
-        # Point or MultiPoly
+    def to_representation(self, value: Point | Polygon | MultiPolygon) -> dict | list | str | int | float | bool | None:
         res = ''
         if value:
             res = json.loads(value.geojson)
