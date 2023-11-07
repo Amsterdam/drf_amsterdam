@@ -104,8 +104,13 @@ class SelfLinkSerializerMixin(serializers.BaseSerializer[_IN]):
         }
 
 
+class Summary(TypedDict):
+    count: int
+    href: str
+
+
 class RelatedSummaryField(serializers.Field):
-    def to_representation(self, value) -> dict[str, str]:
+    def to_representation(self, value) -> Summary:
         count = value.count()
         model_name = value.model.__name__
         mapping = model_name.lower() + "-list"
