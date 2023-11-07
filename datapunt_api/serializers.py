@@ -126,7 +126,12 @@ class RelatedSummaryField(serializers.Field):
 # model to get a nice string representation that can be presented
 # to the user.
 
-class DisplayField(serializers.Field):
+if TYPE_CHECKING:
+    class BaseDisplayField(serializers.Field[_MT, str, str, Any]): pass
+else:
+    class BaseDisplayField(Generic[_MT], serializers.Field): pass
+
+class DisplayField(BaseDisplayField[_MT]):
     """
     Add a `_display` field, based on Model string representation.
     """
@@ -135,7 +140,7 @@ class DisplayField(serializers.Field):
         kwargs['read_only'] = True
         super().__init__(*args, **kwargs)
 
-    def to_representation(self, value: Model) -> str:
+    def to_representation(self, value: _MT) -> str:
         return str(value)
 
 
