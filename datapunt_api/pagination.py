@@ -1,12 +1,15 @@
 from collections import OrderedDict
-from typing import Any
+from typing import Any, TypeVar
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Model
 from rest_framework import pagination, response
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.utils.urls import replace_query_param
 from rest_framework.views import APIView
+
+
+_MT = TypeVar("_MT", bound=Model)
 
 
 class HALPagination(pagination.PageNumberPagination):
@@ -59,7 +62,12 @@ class HALCursorPagination(pagination.CursorPagination):
     count_table: bool = True
     count: int = 0
 
-    def paginate_queryset(self, queryset: QuerySet, request: Request, view: APIView | None = None) -> list | None:
+    def paginate_queryset(
+            self,
+            queryset: QuerySet[_MT],
+            request: Request,
+            view: APIView | None = None
+    ) -> list[_MT] | None:
         if self.count_table:
             self.count = queryset.count()
 
