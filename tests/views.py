@@ -5,13 +5,15 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from datapunt_api import bbox
-from datapunt_api.rest import DatapuntViewSet, DatapuntViewSetWritable, _DisabledHTMLFilterBackend
+from datapunt_api.rest import (DatapuntViewSet, DatapuntViewSetWritable,
+                               _DisabledHTMLFilterBackend)
 from tests.models import (Person, SimpleModel, TemperatureRecord, Thing,
                           WeatherStation)
-from tests.serializers import (PersonSerializer, SelfLinksSerializer,
+from tests.serializers import (DetailedPersonSerializer, PersonSerializer,
+                               SelfLinksSerializer,
                                TemperatureRecordSerializer, ThingSerializer,
                                WeatherDetailStationSerializer,
-                               WeatherStationSerializer, DetailedPersonSerializer)
+                               WeatherStationSerializer)
 
 
 class WeatherFilter(FilterSet):

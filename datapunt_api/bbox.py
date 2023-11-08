@@ -1,5 +1,6 @@
 """Bounding box methods useful for Amsterdam."""
-from math import pi, cos
+from math import cos, pi
+
 from django.contrib.gis.geos import GEOSGeometry, Point
 from rest_framework.request import Request
 from rest_framework.serializers import ValidationError

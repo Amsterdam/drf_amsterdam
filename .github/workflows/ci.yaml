@@ -17,3 +17,6 @@ jobs:
 
       - name: Run tests
         run: docker-compose run --rm tests pytest --cov --cov-fail-under=100
+
+      - name: Run isort
+        run: docker-compose run --rm tests isort . --check --diff

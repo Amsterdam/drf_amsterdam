@@ -1,16 +1,16 @@
 """
 Serialization classes for Datapunt style Django REST Framework APIs.
 """
+import json
 from collections import OrderedDict
-from typing import Any, Mapping, TypeVar, TYPE_CHECKING, Generic, TypedDict
+from typing import TYPE_CHECKING, Any, Generic, Mapping, TypedDict, TypeVar
 
-from django.contrib.gis.geos import Point, Polygon, MultiPolygon
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.db.models import Model
 from django.http import HttpRequest
 from rest_framework import serializers
 from rest_framework.request import Request
 from rest_framework.reverse import reverse
-import json
 
 _IN = TypeVar("_IN")
 _MT = TypeVar("_MT", bound=Model)

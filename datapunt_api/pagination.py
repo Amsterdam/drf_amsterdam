@@ -1,13 +1,12 @@
 from collections import OrderedDict
 from typing import Any, TypeVar
 
-from django.db.models import QuerySet, Model
+from django.db.models import Model, QuerySet
 from rest_framework import pagination, response
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.utils.urls import replace_query_param
 from rest_framework.views import APIView
-
 
 _MT = TypeVar("_MT", bound=Model)
 

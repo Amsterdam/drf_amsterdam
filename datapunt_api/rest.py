@@ -1,28 +1,22 @@
-from typing import Any, TypeVar, TYPE_CHECKING, Generic
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
-from django.db.models import QuerySet, Model
-from rest_framework import viewsets
-from rest_framework import renderers
+from django.db.models import Model, QuerySet
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import renderers, viewsets
 from rest_framework.pagination import BasePagination
 from rest_framework.renderers import BaseRenderer
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 from rest_framework_extensions.mixins import DetailSerializerMixin
-from django_filters.rest_framework import DjangoFilterBackend
-
-from rest_framework.settings import api_settings
-
 from rest_framework_xml.renderers import XMLRenderer
 
-from .renderers import PaginatedCSVRenderer
 from .pagination import HALPagination
-from .serializers import (  # noqa: F401
-    DisplayField, get_links,
-    HALSerializer, LinksField, RelatedSummaryField,
-    SelfLinkSerializerMixin
-)
-
+from .renderers import PaginatedCSVRenderer
+from .serializers import (DisplayField, HALSerializer,  # noqa: F401
+                          LinksField, RelatedSummaryField,
+                          SelfLinkSerializerMixin, get_links)
 
 _MT = TypeVar("_MT", bound=Model)
 _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
