@@ -101,9 +101,6 @@ class SerializerTest(TestCase):
             200, response.status_code, "Wrong response code for {}".format(url)
         )
 
-    def test_active(self):  # noqa
-        self.assertTrue(True)
-
     def test_cannot_serialize_without_request_context(self):
         qs = TemperatureRecord.objects.all()
         self.assertTrue(qs.count() == 3)
