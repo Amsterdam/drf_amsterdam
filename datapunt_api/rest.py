@@ -1,4 +1,4 @@
-from typing import Any, TypeVar
+from typing import Any, TypeVar, TYPE_CHECKING, Generic
 
 from django.db.models import QuerySet, Model
 from rest_framework import viewsets
@@ -25,6 +25,7 @@ from .serializers import (  # noqa: F401
 
 
 _MT = TypeVar("_MT", bound=Model)
+_MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
 
 
 DEFAULT_RENDERERS: list[type[BaseRenderer]] = [
@@ -59,7 +60,13 @@ def _is_detailed_request(detailed_keyword: str, request: Request) -> bool:
     return False
 
 
-class DatapuntViewSet(DetailSerializerMixin, viewsets.ReadOnlyModelViewSet):
+if TYPE_CHECKING:
+    class ReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet[_MT_co]): pass
+else:
+    class ReadOnlyModelViewSet(Generic[_MT_co], viewsets.ReadOnlyModelViewSet): pass
+
+
+class DatapuntViewSet(DetailSerializerMixin, ReadOnlyModelViewSet[_MT_co]):
     """ViewSet subclass for use in Datapunt APIs.
 
     Note:
