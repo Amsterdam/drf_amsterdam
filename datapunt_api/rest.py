@@ -1,6 +1,6 @@
-from typing import Any
+from typing import Any, TypeVar
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Model
 from rest_framework import viewsets
 from rest_framework import renderers
 from rest_framework.pagination import BasePagination
@@ -23,6 +23,10 @@ from .serializers import (  # noqa: F401
     SelfLinkSerializerMixin
 )
 
+
+_MT = TypeVar("_MT", bound=Model)
+
+
 DEFAULT_RENDERERS: list[type[BaseRenderer]] = [
     renderers.JSONRenderer,
     PaginatedCSVRenderer,
@@ -43,7 +47,7 @@ class _DisabledHTMLFilterBackend(DjangoFilterBackend):
     in our case)
     """
 
-    def to_html(self, request: Request, queryset: QuerySet, view: APIView) -> str:
+    def to_html(self, request: Request, queryset: QuerySet[_MT], view: APIView) -> str:
         return ""
 
 
