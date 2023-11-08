@@ -51,7 +51,7 @@ class LinksField(BaseLinksField[_MT]):
     lookup_url_kwarg: str
     view_name: str | None = None
 
-    def __init__(self, view_name: str | None = None, **kwargs):
+    def __init__(self, view_name: str | None = None, **kwargs: Any):
         if view_name is not None:
             self.view_name = view_name
         assert self.view_name is not None, 'The `view_name` argument is required.'
