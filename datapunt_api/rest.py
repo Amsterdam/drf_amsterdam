@@ -108,7 +108,7 @@ class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
 
     detailed_keyword: str = 'detailed'
 
-    def list(self, request: Request, *args, **kwargs) -> Response:
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         # Checking if a detailed response is required
         if _is_detailed_request(self.detailed_keyword, request):
             self.serializer_class = self.serializer_detail_class
