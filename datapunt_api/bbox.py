@@ -119,7 +119,7 @@ def determine_bbox(request: Request) -> tuple[list[float] | None, str | None]:
     return bbox, err
 
 
-def valid_bbox(bboxp: str, srid: int = 4326) -> tuple[list[float], str | None]:
+def valid_bbox(bboxp: str, srid: int = 4326) -> tuple[list[float], str | None]: # noqa
     """
     Check if bbox is a valid bounding box. (wgs84) for now.
 

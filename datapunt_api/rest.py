@@ -32,7 +32,7 @@ DEFAULT_RENDERERS: list[type[BaseRenderer]] = [
 
 if api_settings.DEFAULT_RENDERER_CLASSES:
     # The APISettings class automagically converts the strings to classes
-    DEFAULT_RENDERERS = api_settings.DEFAULT_RENDERER_CLASSES # type: ignore
+    DEFAULT_RENDERERS = api_settings.DEFAULT_RENDERER_CLASSES  # type: ignore
 
 
 class _DisabledHTMLFilterBackend(DjangoFilterBackend):
@@ -55,9 +55,11 @@ def _is_detailed_request(detailed_keyword: str, request: Request) -> bool:
 
 
 if TYPE_CHECKING:
-    class ReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet[_MT_co]): pass
+    class ReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet[_MT_co]):
+        pass
 else:
-    class ReadOnlyModelViewSet(Generic[_MT_co], viewsets.ReadOnlyModelViewSet): pass
+    class ReadOnlyModelViewSet(Generic[_MT_co], viewsets.ReadOnlyModelViewSet):
+        pass
 
 
 class DatapuntViewSet(DetailSerializerMixin, ReadOnlyModelViewSet[_MT_co]):
@@ -90,9 +92,11 @@ class DatapuntViewSet(DetailSerializerMixin, ReadOnlyModelViewSet[_MT_co]):
 
 
 if TYPE_CHECKING:
-    class ModelViewSet(viewsets.ModelViewSet[_MT_co]): pass
+    class ModelViewSet(viewsets.ModelViewSet[_MT_co]):
+        pass
 else:
-    class ModelViewSet(Generic[_MT_co], viewsets.ModelViewSet): pass
+    class ModelViewSet(Generic[_MT_co], viewsets.ModelViewSet):
+        pass
 
 
 class DatapuntViewSetWritable(DetailSerializerMixin, ModelViewSet[_MT_co]):

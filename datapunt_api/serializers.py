@@ -41,9 +41,11 @@ class DataSetSerializerMixin(serializers.BaseSerializer[_IN]):
 
 
 if TYPE_CHECKING:
-    class BaseLinksField(serializers.RelatedField[_MT, str, dict[str, dict[str, str | None]]]): pass
+    class BaseLinksField(serializers.RelatedField[_MT, str, dict[str, dict[str, str | None]]]):
+        pass
 else:
-    class BaseLinksField(Generic[_MT], serializers.RelatedField): pass
+    class BaseLinksField(Generic[_MT], serializers.RelatedField):
+        pass
 
 
 class LinksField(BaseLinksField[_MT]):
@@ -129,9 +131,12 @@ class RelatedSummaryField(serializers.Field):
 # to the user.
 
 if TYPE_CHECKING:
-    class BaseDisplayField(serializers.Field[_MT, str, str, Any]): pass
+    class BaseDisplayField(serializers.Field[_MT, str, str, Any]):
+        pass
 else:
-    class BaseDisplayField(Generic[_MT], serializers.Field): pass
+    class BaseDisplayField(Generic[_MT], serializers.Field):
+        pass
+
 
 class DisplayField(BaseDisplayField[_MT]):
     """
@@ -149,7 +154,6 @@ class DisplayField(BaseDisplayField[_MT]):
 class GeoJson(TypedDict):
     type: str
     coordinates: list[float] | list[list[list[float]]] | list[list[list[list[float]]]]
-
 
 
 class BaseMultipleGeometry:

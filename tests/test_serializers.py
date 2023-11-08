@@ -269,7 +269,7 @@ class SerializerTest(TestCase):
         modder.save()
 
         client = APIClient()
-        response = client.get(f'/tests/person/?detailed=True', format='json')
+        response = client.get('/tests/person/?detailed=True', format='json')
 
         body = response.json()
         results = body.get('results')
