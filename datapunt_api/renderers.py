@@ -8,11 +8,11 @@ class PaginatedCSVRenderer(CSVRenderer):
 
     def render(
             self,
-            data: dict | list,
+            data: Any,
             media_type: str | None = None,
             renderer_context: dict[str, Any] = {},
             writer_opts: dict[str, Any] | None = None,
-    ) -> str | bytes:
+    ) -> Any:
         if not isinstance(data, list):
             data = data.get(self.results_field, [])
 
