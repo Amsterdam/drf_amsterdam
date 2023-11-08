@@ -141,7 +141,7 @@ class DisplayField(BaseDisplayField[_MT]):
     """
     Add a `_display` field, based on Model string representation.
     """
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs['source'] = '*'
         kwargs['read_only'] = True
         super().__init__(*args, **kwargs)
