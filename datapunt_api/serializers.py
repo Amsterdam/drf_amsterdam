@@ -68,15 +68,11 @@ class LinksField(BaseLinksField[_MT]):
         assert isinstance(request, Request)
         assert self.view_name is not None
 
-        if hasattr(value, 'pk') and value.pk in (None, ''):
-            href = None
-        else:
-            lookup_value = getattr(value, self.lookup_field)
-            kwargs = {self.lookup_url_kwarg: lookup_value}
-            href = reverse(self.view_name, kwargs=kwargs, request=request, format=None)
+        lookup_value = getattr(value, self.lookup_field)
+        kwargs = {self.lookup_url_kwarg: lookup_value}
 
         return OrderedDict([('self', {
-            'href': href
+            'href': reverse(self.view_name, kwargs=kwargs, request=request, format=None)
         })])
 
 
