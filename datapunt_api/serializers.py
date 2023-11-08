@@ -80,7 +80,7 @@ class LinksField(BaseLinksField[_MT]):
 
 class HALSerializer(serializers.HyperlinkedModelSerializer):
     url_field_name: str = '_links'
-    serializer_url_field: type[serializers.RelatedField] = LinksField
+    serializer_url_field = LinksField
 
 
 class SelfLinkSerializerMixin(serializers.BaseSerializer[_IN]):
