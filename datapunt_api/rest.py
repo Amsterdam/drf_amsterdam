@@ -95,7 +95,13 @@ class DatapuntViewSet(DetailSerializerMixin, ReadOnlyModelViewSet[_MT_co]):
         return context
 
 
-class DatapuntViewSetWritable(DetailSerializerMixin, viewsets.ModelViewSet):
+if TYPE_CHECKING:
+    class ModelViewSet(viewsets.ModelViewSet[_MT_co]): pass
+else:
+    class ModelViewSet(Generic[_MT_co], viewsets.ModelViewSet): pass
+
+
+class DatapuntViewSetWritable(DetailSerializerMixin, ModelViewSet[_MT_co]):
     """ViewSet subclass for use in Datapunt APIs.
 
     Note:
