@@ -36,7 +36,11 @@ class DataSetSerializerMixin(serializers.BaseSerializer[_IN]):
 
     def to_representation(self, obj: _IN) -> dict[str, Any]:
         result = super().to_representation(obj)
+
+        assert isinstance(result, dict)
+
         result['dataset'] = self.dataset
+
         return result
 
 
