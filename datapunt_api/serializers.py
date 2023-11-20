@@ -175,9 +175,6 @@ else:
 class MultipleGeometryField(BaseMultipleGeometryField):
     read_only: bool = True
 
-    def get_attribute(self, obj: BaseMultipleGeometry) -> Point | Polygon | MultiPolygon | None:
-        return obj.geometrie
-
     def to_representation(self, value: Point | Polygon | MultiPolygon | None) -> str | GeoJson:
         res = ''
         if value:
