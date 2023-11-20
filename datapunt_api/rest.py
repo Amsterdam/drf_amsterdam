@@ -57,12 +57,18 @@ def _is_detailed_request(detailed_keyword: str, request: Request) -> bool:
 if TYPE_CHECKING:
     class ReadOnlyModelViewSet(viewsets.ReadOnlyModelViewSet[_MT_co]):
         pass
+
+    class BaseDetailSerializerMixin(DetailSerializerMixin[_MT_co]):
+        pass
 else:
     class ReadOnlyModelViewSet(Generic[_MT_co], viewsets.ReadOnlyModelViewSet):
         pass
 
+    class BaseDetailSerializerMixin(Generic[_MT_co], DetailSerializerMixin):
+        pass
 
-class DatapuntViewSet(DetailSerializerMixin[_MT_co], ReadOnlyModelViewSet[_MT_co]):
+
+class DatapuntViewSet(BaseDetailSerializerMixin[_MT_co], ReadOnlyModelViewSet[_MT_co]):
     """ViewSet subclass for use in Datapunt APIs.
 
     Note:
@@ -99,7 +105,7 @@ else:
         pass
 
 
-class DatapuntViewSetWritable(DetailSerializerMixin[_MT_co], ModelViewSet[_MT_co]):
+class DatapuntViewSetWritable(BaseDetailSerializerMixin[_MT_co], ModelViewSet[_MT_co]):
     """ViewSet subclass for use in Datapunt APIs.
 
     Note:
