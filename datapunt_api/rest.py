@@ -62,7 +62,7 @@ else:
         pass
 
 
-class DatapuntViewSet(DetailSerializerMixin, ReadOnlyModelViewSet[_MT_co]):
+class DatapuntViewSet(DetailSerializerMixin[_MT_co], ReadOnlyModelViewSet[_MT_co]):
     """ViewSet subclass for use in Datapunt APIs.
 
     Note:
@@ -99,7 +99,7 @@ else:
         pass
 
 
-class DatapuntViewSetWritable(DetailSerializerMixin, ModelViewSet[_MT_co]):
+class DatapuntViewSetWritable(DetailSerializerMixin[_MT_co], ModelViewSet[_MT_co]):
     """ViewSet subclass for use in Datapunt APIs.
 
     Note:
