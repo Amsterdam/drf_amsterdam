@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Mapping
 
 from rest_framework_csv.renderers import CSVRenderer
 
@@ -10,8 +10,8 @@ class PaginatedCSVRenderer(CSVRenderer):
             self,
             data: Any,
             media_type: str | None = None,
-            renderer_context: dict[str, Any] = {},
-            writer_opts: dict[str, Any] | None = None,
+            renderer_context: Mapping[str, Any] | None = {},
+            writer_opts: Mapping[str, Any] | None = None,
     ) -> Any:
         if not isinstance(data, list):
             data = data.get(self.results_field, [])
