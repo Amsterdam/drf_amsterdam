@@ -1,6 +1,6 @@
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
-from django.db.models import QuerySet, Model
+from django.db.models import Model, QuerySet
 from rest_framework.serializers import BaseSerializer
 
 _MT_co = TypeVar("_MT_co", bound=Model, covariant=True)
