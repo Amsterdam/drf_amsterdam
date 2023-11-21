@@ -18,6 +18,7 @@ setup(
         'djangorestframework_csv',
         'djangorestframework_xml'],
     include_package_data=True,
+    package_data={'datapunt_api': ['py.typed']},
     license='Mozilla Public License Version 2.0',
     description='Amsterdam Datapunt code and style for Django REST Framework.',
     long_description=README,
