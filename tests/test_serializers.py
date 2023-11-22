@@ -9,7 +9,8 @@ from datapunt_api.serializers import get_links
 from tests.models import (Location, Person, SimpleModel, TemperatureRecord,
                           Thing, WeatherStation)
 from tests.serializers import (DatasetSerializer, DisplayFieldSerializer,
-                               LocationSerializer, TemperatureRecordSerializer, WeatherStationSerializer)
+                               LocationSerializer, TemperatureRecordSerializer,
+                               WeatherStationSerializer)
 
 # # fake requests
 # See: https://stackoverflow.com/questions/34438290/
