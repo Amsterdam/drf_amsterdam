@@ -23,3 +23,6 @@ jobs:
 
       - name: Run flake8
         run: docker-compose run --rm tests flake8
+
+      - name: Run mypy
+        run: docker-compose run --rm tests bash -c "mypy datapunt_api/ --strict | mypy-baseline filter"
