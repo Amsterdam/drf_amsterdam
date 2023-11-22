@@ -69,7 +69,7 @@ class LinksField(BaseLinksField[_MT]):
 
         super().__init__(**kwargs)
 
-    def get_url(self, obj: Model, view_name: str, request: Request, format: str | None) -> str | None:
+    def get_url(self, obj: Model, view_name: str, request: Request | None, format: str | None) -> str | None:
         """
         Given an object, return the URL that hyperlinks to the object.
 
@@ -87,7 +87,6 @@ class LinksField(BaseLinksField[_MT]):
 
     def to_representation(self, value: _MT) -> dict[str, dict[str, str | None]]:
         request = self.context.get('request')
-        assert isinstance(request, Request)
         assert self.view_name is not None
 
         return OrderedDict([('self', {
