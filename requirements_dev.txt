@@ -4,6 +4,7 @@ djangorestframework-stubs[compatible-mypy]
 flake8
 isort
 mypy
+mypy-baseline
 pytest-cov
 pytest-django
 spatialite
