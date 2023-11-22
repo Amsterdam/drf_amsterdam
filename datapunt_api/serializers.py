@@ -69,16 +69,29 @@ class LinksField(BaseLinksField[_MT]):
 
         super().__init__(**kwargs)
 
+    def get_url(self, obj: Model, view_name: str, request: Request, format: str | None) -> str | None:
+        """
+        Given an object, return the URL that hyperlinks to the object.
+
+        May raise a `NoReverseMatch` if the `view_name` and `lookup_field`
+        attributes are not configured to correctly match the URL conf.
+        """
+        # Unsaved objects will not yet have a valid URL.
+        if hasattr(obj, 'pk') and obj.pk in (None, ''):
+            return None
+
+        lookup_value = getattr(obj, self.lookup_field)
+        kwargs = {self.lookup_url_kwarg: lookup_value}
+
+        return reverse(view_name, kwargs=kwargs, request=request, format=format)
+
     def to_representation(self, value: _MT) -> dict[str, dict[str, str | None]]:
         request = self.context.get('request')
         assert isinstance(request, Request)
         assert self.view_name is not None
 
-        lookup_value = getattr(value, self.lookup_field)
-        kwargs = {self.lookup_url_kwarg: lookup_value}
-
         return OrderedDict([('self', {
-            'href': reverse(self.view_name, kwargs=kwargs, request=request, format=None)
+            'href': self.get_url(value, self.view_name, request, None)
         })])
 
 
