@@ -16,13 +16,13 @@ jobs:
         run: docker-compose build
 
       - name: Run tests
-        run: docker-compose run --rm tests pytest --cov --cov-fail-under=100
+        run: make pytest
 
       - name: Run isort
-        run: docker-compose run --rm tests isort . --check --diff
+        run: make isort
 
       - name: Run flake8
-        run: docker-compose run --rm tests flake8
+        run: make flake8
 
       - name: Run mypy
-        run: docker-compose run --rm tests bash -c "mypy datapunt_api/ --strict | mypy-baseline filter"
+        run: make mypy
