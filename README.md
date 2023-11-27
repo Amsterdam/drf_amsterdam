@@ -33,19 +33,14 @@ docker-compose build
 docker-compose run --rm tests pytest --cov
 ```
 
-## Make Release
+## Changelog
 
-use
+### 1.0.0
+- Added types
+- Tidied up code
+- Added tests to reach 100% code coverage
 
-```shell
-bumpversion [major, minor, patch]
-```
-
-to tag the branch.
-
-```shell
-make dist
-make release
-```
-
-passwords are in the passwords safes.
+#### Breaking changes
+- `LinksField` now extends `RelatedField` instead of `HyperLinkedIdentityField`. The reason for this is that
+`HyperLinkedIdentityField` has to return a `HyperLink` object in order to comply with the rules of covariance,
+which is not what we desire it to return.
