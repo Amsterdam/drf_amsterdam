@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='drf_amsterdam',
-    version='0.4.1',
+    version='1.0.0',
     packages=find_packages(),
     install_requires=[
         'djangorestframework',
@@ -25,11 +25,11 @@ setup(
     author='Amsterdam Datapunt',
     author_email='datapunt@amsterdam.nl',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.11',
         'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)'
     ],
 )
