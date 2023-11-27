@@ -1,7 +1,7 @@
 .PHONY: release dist build test coverage clean distclean
 
 PYTHON = python3
-DC = docker-compose run --rm
+DC = docker-compose run --rm tests
 
 release: test
 	$(PYTHON) -m twine upload dist/*
@@ -12,8 +12,19 @@ dist:
 build:
 	$(PYTHON) setup.py build
 
-test:
-	$(DC) tests
+pytest:
+	$(DC) pytest --cov --cov-fail-under=100
+
+isort:
+	$(DC) isort . --check --diff
+
+flake8:
+	$(DC) flake8
+
+mypy:
+	$(DC) bash -c "mypy datapunt_api/ --strict | mypy-baseline filter"
+
+test: pytest isort flake8 mypy
 
 install:                            ## Install requirements and sync venv with expected state as defined in requirements.txt
 	pip install --upgrade -r requirements.txt -r requirements_dev.txt
