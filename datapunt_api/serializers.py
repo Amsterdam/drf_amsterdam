@@ -1,13 +1,26 @@
 """
 Serialization classes for Datapunt style Django REST Framework APIs.
 """
-from collections import OrderedDict
-from rest_framework import serializers
-from rest_framework.reverse import reverse
 import json
+from collections import OrderedDict
+from typing import TYPE_CHECKING, Any, Generic, Mapping, TypedDict, TypeVar
+
+from django.contrib.gis.geos import MultiPolygon, Point, Polygon
+from django.db.models import Model
+from django.http import HttpRequest
+from rest_framework import serializers
+from rest_framework.request import Request
+from rest_framework.reverse import reverse
+
+_IN = TypeVar("_IN")
+_MT = TypeVar("_MT", bound=Model)
 
 
-def get_links(view_name, kwargs=None, request=None):
+def get_links(
+        view_name: str,
+        kwargs: Mapping[str, Any] | None = None,
+        request: HttpRequest | None = None
+) -> OrderedDict[str, dict[str, str]]:
     result = OrderedDict([
         ('self', dict(
             href=reverse(view_name, kwargs=kwargs, request=request)
@@ -17,36 +30,77 @@ def get_links(view_name, kwargs=None, request=None):
     return result
 
 
-class DataSetSerializerMixin(object):
+class DataSetSerializerMixin(serializers.BaseSerializer[_IN]):
     """Add dataset field to indicate 'source' of this data."""
-    def to_representation(self, obj):
+    dataset: str
+
+    def to_representation(self, obj: _IN) -> dict[str, Any]:
         result = super().to_representation(obj)
+
+        assert isinstance(result, dict)
+
         result['dataset'] = self.dataset
+
         return result
 
 
-class LinksField(serializers.HyperlinkedIdentityField):
+if TYPE_CHECKING:
+    class BaseLinksField(serializers.RelatedField[_MT, str, dict[str, dict[str, str | None]]]):
+        pass
+else:
+    class BaseLinksField(Generic[_MT], serializers.RelatedField):
+        pass
 
-    def to_representation(self, value):
+
+class LinksField(BaseLinksField[_MT]):
+    lookup_field: str = 'pk'
+    lookup_url_kwarg: str
+    view_name: str | None = None
+
+    def __init__(self, view_name: str | None = None, **kwargs: Any):
+        if view_name is not None:
+            self.view_name = view_name
+        assert self.view_name is not None, 'The `view_name` argument is required.'
+        self.lookup_field = kwargs.pop('lookup_field', self.lookup_field)
+        self.lookup_url_kwarg = kwargs.pop('lookup_url_kwarg', self.lookup_field)
+
+        kwargs['read_only'] = True
+        kwargs['source'] = '*'
+
+        super().__init__(**kwargs)
+
+    def get_url(self, obj: Model, view_name: str, request: Request | None, format: str | None) -> str | None:
+        """
+        Given an object, return the URL that hyperlinks to the object.
+
+        May raise a `NoReverseMatch` if the `view_name` and `lookup_field`
+        attributes are not configured to correctly match the URL conf.
+        """
+        # Unsaved objects will not yet have a valid URL.
+        if hasattr(obj, 'pk') and obj.pk in (None, ''):
+            return None
+
+        lookup_value = getattr(obj, self.lookup_field)
+        kwargs = {self.lookup_url_kwarg: lookup_value}
+
+        return reverse(view_name, kwargs=kwargs, request=request, format=format)
+
+    def to_representation(self, value: _MT) -> dict[str, dict[str, str | None]]:
         request = self.context.get('request')
+        assert self.view_name is not None
 
-        result = OrderedDict([
-            ('self', dict(
-                href=self.get_url(value, self.view_name, request, None))
-             ),
-        ])
-
-        return result
+        return OrderedDict([('self', {
+            'href': self.get_url(value, self.view_name, request, None)
+        })])
 
 
 class HALSerializer(serializers.HyperlinkedModelSerializer):
-    url_field_name = '_links'
+    url_field_name: str = '_links'
     serializer_url_field = LinksField
 
 
-# TODO: check that this is needed (vs just using the HALSerializer above).
-class SelfLinkSerializerMixin():
-    def get__links(self, obj):
+class SelfLinkSerializerMixin(serializers.BaseSerializer[_IN]):
+    def get__links(self, obj: Model) -> dict[str, dict[str, str]]:
         """
         Serialization of _links field for detail view (assumes ModelViewSet).
 
@@ -64,8 +118,13 @@ class SelfLinkSerializerMixin():
         }
 
 
+class Summary(TypedDict):
+    count: int
+    href: str
+
+
 class RelatedSummaryField(serializers.Field):
-    def to_representation(self, value):
+    def to_representation(self, value) -> Summary:
         count = value.count()
         model_name = value.model.__name__
         mapping = model_name.lower() + "-list"
@@ -74,10 +133,10 @@ class RelatedSummaryField(serializers.Field):
         parent_pk = value.instance.pk
         filter_name = list(value.core_filters.keys())[0]
 
-        return dict(
-            count=count,
-            href="{}?{}={}".format(url, filter_name, parent_pk),
-        )
+        return {
+            'count': count,
+            'href': f'{url}?{filter_name}={parent_pk}',
+        }
 
 
 # Note about DisplayField below; setting source to '*' causes the
@@ -87,32 +146,50 @@ class RelatedSummaryField(serializers.Field):
 # model to get a nice string representation that can be presented
 # to the user.
 
-class DisplayField(serializers.Field):
+if TYPE_CHECKING:
+    class BaseDisplayField(serializers.Field[_MT, str, str, Any]):
+        pass
+else:
+    class BaseDisplayField(Generic[_MT], serializers.Field):
+        pass
+
+
+class DisplayField(BaseDisplayField[_MT]):
     """
     Add a `_display` field, based on Model string representation.
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs['source'] = '*'
         kwargs['read_only'] = True
         super().__init__(*args, **kwargs)
 
-    def to_representation(self, value):
+    def to_representation(self, value: _MT) -> str:
         return str(value)
 
 
-class MultipleGeometryField(serializers.Field):
+class GeoJson(TypedDict):
+    type: str
+    coordinates: list[float] | list[list[list[float]]] | list[list[list[list[float]]]]
 
-    read_only = True
 
-    def get_attribute(self, obj):
-        # Checking if point geometry exists. If not returning the
-        # regular multipoly geometry
-        return obj.geometrie
+class BaseMultipleGeometry:
+    """Extend this class when you plan to use the serializer field below."""
+    geometrie: Point | Polygon | MultiPolygon | None
 
-    def to_representation(self, value):
-        # Serialize the GeoField. Value could be either None,
-        # Point or MultiPoly
+
+if TYPE_CHECKING:
+    BaseMultipleGeometryField =\
+        serializers.Field[Point | Polygon | MultiPolygon | None, GeoJson, str | GeoJson, BaseMultipleGeometry]
+else:
+    BaseMultipleGeometryField = serializers.Field
+
+
+class MultipleGeometryField(BaseMultipleGeometryField):
+    read_only: bool = True
+
+    def to_representation(self, value: Point | Polygon | MultiPolygon | None) -> str | GeoJson:
         res = ''
         if value:
             res = json.loads(value.geojson)
+
         return res

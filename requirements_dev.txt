@@ -1,6 +1,12 @@
-spatialite
 bumpversion
+django-filter-stubs
+djangorestframework-stubs[compatible-mypy]
+flake8
+isort
+mypy
+mypy-baseline
 pytest-cov
 pytest-django
-wheel
+spatialite
 twine
+wheel

@@ -1,6 +1,8 @@
 """Bounding box methods useful for Amsterdam."""
-from math import pi, cos
-from django.contrib.gis.geos import Point
+from math import cos, pi
+
+from django.contrib.gis.geos import GEOSGeometry, Point
+from rest_framework.request import Request
 from rest_framework.serializers import ValidationError
 
 # A BBOX, or "bounding box," is a rectangular area used to define a specific
@@ -18,7 +20,7 @@ from rest_framework.serializers import ValidationError
 BBOX = [52.03560, 4.58565, 52.48769, 5.31360]
 
 
-def parse_xyr(value: str) -> (Point, int):
+def parse_xyr(value: str) -> tuple[GEOSGeometry, float]:
     """
     Parse x, y, radius input.
 
@@ -30,7 +32,7 @@ def parse_xyr(value: str) -> (Point, int):
     """
     # Split the input string into three parts: x, y, and radius.
     try:
-        x, y, radius = value.split(',')
+        x_str, y_str, radius_str = value.split(',')
     except ValueError:
         raise ValidationError(
             "Locatie must be rdx,rdy,radius(m) or lat,long,radius(m)"
@@ -38,9 +40,9 @@ def parse_xyr(value: str) -> (Point, int):
 
     # Try converting the input strings to floats.
     try:
-        x = float(x)
-        y = float(y)
-        radius = float(radius)
+        x = float(x_str)
+        y = float(y_str)
+        radius = float(radius_str)
     except ValueError:
         raise ValidationError(
             "Locatie must be x: float, y: float, r: int"
@@ -56,7 +58,7 @@ def parse_xyr(value: str) -> (Point, int):
     return point, radius
 
 
-def dist_to_deg(distance: int, latitude: float) -> float:
+def dist_to_deg(distance: float, latitude: float) -> float:
     """
     Convert meters to degrees.
 
@@ -86,12 +88,13 @@ def dist_to_deg(distance: int, latitude: float) -> float:
 
     lat = latitude if latitude >= 0 else -1 * latitude
     rad2deg = 180 / pi
-    earthRadius = 6378160.0
-    latitudeCorrection = 0.5 * (1 + cos(lat * pi / 180))
-    return (distance / (earthRadius * latitudeCorrection) * rad2deg)
+    earth_radius = 6378160.0
+    latitude_correction = 0.5 * (1 + cos(lat * pi / 180))
+
+    return distance / (earth_radius * latitude_correction) * rad2deg
 
 
-def determine_bbox(request) -> (list[float] | None, str | None):
+def determine_bbox(request: Request) -> tuple[list[float] | None, str | None]:
     """
     Create a bounding box if it is given with the request.
     Returns the default bounding box if the bbox query parameter is found in the request.
@@ -116,7 +119,7 @@ def determine_bbox(request) -> (list[float] | None, str | None):
     return bbox, err
 
 
-def valid_bbox(bboxp: str, srid: int = 4326) -> (list[float] | None, str | None):
+def valid_bbox(bboxp: str, srid: int = 4326) -> tuple[list[float], str | None]: # noqa
     """
     Check if bbox is a valid bounding box. (wgs84) for now.
 
@@ -128,16 +131,16 @@ def valid_bbox(bboxp: str, srid: int = 4326) -> (list[float] | None, str | None)
         The bounding box and error message. The bounding box is a list of four coordinates
         [min_lon, min_lat, max_lon, max_lat]. The error message is a string or None.
     """
-    bbox = bboxp.split(',')
+    bbox_str = bboxp.split(',')
     err = None
 
     # check if we got 4 parameters
-    if not len(bbox) == 4:
+    if len(bbox_str) != 4:
         return [], "wrong numer of arguments (lon, lat, lon, lat)"
 
     # check if we got floats
     try:
-        bbox = [float(f) for f in bbox]
+        bbox = [float(f) for f in bbox_str]
     except ValueError:
         return [], "Did not receive floats"
 

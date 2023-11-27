@@ -1,4 +1,5 @@
 import os
+
 from setuptools import find_packages, setup
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
@@ -9,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='drf_amsterdam',
-    version='0.4.1',
+    version='1.0.0',
     packages=find_packages(),
     install_requires=[
         'djangorestframework',
@@ -17,17 +18,18 @@ setup(
         'djangorestframework_csv',
         'djangorestframework_xml'],
     include_package_data=True,
+    package_data={'datapunt_api': ['py.typed']},
     license='Mozilla Public License Version 2.0',
     description='Amsterdam Datapunt code and style for Django REST Framework.',
     long_description=README,
     author='Amsterdam Datapunt',
     author_email='datapunt@amsterdam.nl',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.11',
         'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)'
     ],
 )

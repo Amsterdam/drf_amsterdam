@@ -15,7 +15,7 @@ class WeatherStationSerializer(HALSerializer):
         fields = '__all__'
 
 
-class DatasetSerializer(DataSetSerializerMixin, HALSerializer):
+class DatasetSerializer(DataSetSerializerMixin, ModelSerializer):
     dataset = 'test_dataset'
 
     class Meta:

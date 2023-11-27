@@ -1,5 +1,4 @@
 from django.test import TestCase
-from rest_framework.pagination import Cursor
 from rest_framework.test import APIClient
 
 from datapunt_api.pagination import HALCursorPagination

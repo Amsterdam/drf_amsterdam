@@ -1,0 +1,2 @@
+datapunt_api/serializers.py:0: error: Missing type parameters for generic type "Field"  [type-arg]
+datapunt_api/serializers.py:0: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]

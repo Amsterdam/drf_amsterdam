@@ -4,7 +4,8 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 from rest_framework.exceptions import ValidationError
 
-from datapunt_api.bbox import BBOX, determine_bbox, valid_bbox, dist_to_deg, parse_xyr
+from datapunt_api.bbox import (BBOX, determine_bbox, dist_to_deg, parse_xyr,
+                               valid_bbox)
 
 
 class ValidBboxTestCase(TestCase):

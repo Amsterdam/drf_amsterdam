@@ -9,7 +9,8 @@ from datapunt_api.serializers import get_links
 from tests.models import (Location, Person, SimpleModel, TemperatureRecord,
                           Thing, WeatherStation)
 from tests.serializers import (DatasetSerializer, DisplayFieldSerializer,
-                               LocationSerializer, TemperatureRecordSerializer)
+                               LocationSerializer, TemperatureRecordSerializer,
+                               WeatherStationSerializer)
 
 # # fake requests
 # See: https://stackoverflow.com/questions/34438290/
@@ -100,9 +101,6 @@ class SerializerTest(TestCase):
         self.assertEqual(
             200, response.status_code, "Wrong response code for {}".format(url)
         )
-
-    def test_active(self):  # noqa
-        self.assertTrue(True)
 
     def test_cannot_serialize_without_request_context(self):
         qs = TemperatureRecord.objects.all()
@@ -272,7 +270,7 @@ class SerializerTest(TestCase):
         modder.save()
 
         client = APIClient()
-        response = client.get(f'/tests/person/?detailed=True', format='json')
+        response = client.get('/tests/person/?detailed=True', format='json')
 
         body = response.json()
         results = body.get('results')
@@ -293,3 +291,19 @@ class SerializerTest(TestCase):
         response = client.get('/tests/weatherstation/')
 
         self.assertNotIn('<select', response.content.decode('utf-8'))
+
+    def test_links_field_might_produce_none_url(self):
+        station = WeatherStation()
+        station.number = 260
+        station.centroid = get_wgs_puntje()
+        station.centroid_rd = get_rd_puntje()
+
+        serializer = WeatherStationSerializer(station)
+
+        _links = serializer.data.get('_links')
+        self.assertIsNotNone(_links)
+
+        self_links = _links.get('self')
+        self.assertIsNotNone(self_links)
+
+        self.assertIsNone(self_links.get('href'))
