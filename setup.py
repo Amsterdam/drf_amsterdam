@@ -22,6 +22,7 @@ setup(
     license='Mozilla Public License Version 2.0',
     description='Amsterdam Datapunt code and style for Django REST Framework.',
     long_description=README,
+    long_description_content_type='text/markdown',
     author='Amsterdam Datapunt',
     author_email='datapunt@amsterdam.nl',
     classifiers=[
