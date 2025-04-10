@@ -15,10 +15,22 @@ REST Framework:
 pip install drf_amsterdam
 ```
 
-To use the API page styling provided by this package you must add it to the
-Django settings file in INSTALLED_APPS, ahead of 'rest_framework' so that the
-templates and static files included in drf_amsterdam override those included
-with Django REST Framework.
+To use the API page styling provided by this package, you need to add datapunt_api to the INSTALLED_APPS list in your Django settings file — before 'rest_framework'.
+This ensures that the templates and static files included in datapunt_api override those provided by Django REST Framework, so the custom styling is applied correctly.
+
+
+## Building and running the application
+
+If you want to use this package in a local project setup:
+
+```shell
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+> **Note**: This package itself is not a standalone application, but is designed to be integrated into an existing Django project.
+
 
 ## Running tests
 
