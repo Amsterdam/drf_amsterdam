@@ -41,8 +41,8 @@ requirements: spatialite, sqlite extension
 or use docker-compose:
 
 ```shell
-docker-compose build
-docker-compose run --rm tests pytest --cov
+docker compose build
+docker compose run --rm tests pytest --cov
 ```
 
 ## Changelog
