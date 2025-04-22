@@ -11,7 +11,7 @@ from django.http import HttpRequest
 from rest_framework import serializers
 from rest_framework.request import Request
 from rest_framework.reverse import reverse
-from rest_framework.serializers import (HyperlinkedModelSerializer)
+from rest_framework.serializers import HyperlinkedModelSerializer
 
 _IN = TypeVar("_IN")
 _MT = TypeVar("_MT", bound=Model)
