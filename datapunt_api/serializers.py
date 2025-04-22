@@ -94,7 +94,8 @@ class LinksField(BaseLinksField[_MT]):
         })])
 
 
-class HALSerializer(serializers.HyperlinkedModelSerializer):
+class HALSerializer(HyperlinkedModelSerializer):  # type: ignore[type-arg]
+# class HALSerializer(serializers.HyperlinkedModelSerializer):
     url_field_name: str = '_links'
     serializer_url_field = LinksField
 
