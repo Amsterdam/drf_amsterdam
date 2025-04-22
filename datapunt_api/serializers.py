@@ -93,7 +93,8 @@ class LinksField(BaseLinksField[_MT]):
             'href': self.get_url(value, self.view_name, request, None)
         })])
 
-class HALSerializer(HyperlinkedModelSerializer):  # type: ignore[type-arg]
+# class HALSerializer(HyperlinkedModelSerializer):  # type: ignore[type-arg]
+class HALSerializer(serializers.HyperlinkedModelSerializer):
     url_field_name: str = '_links'
     serializer_url_field = LinksField
 
