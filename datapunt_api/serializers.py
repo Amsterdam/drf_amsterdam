@@ -11,6 +11,7 @@ from django.http import HttpRequest
 from rest_framework import serializers
 from rest_framework.request import Request
 from rest_framework.reverse import reverse
+from rest_framework.serializers import HyperlinkedModelSerializer
 
 _IN = TypeVar("_IN")
 _MT = TypeVar("_MT", bound=Model)
@@ -94,7 +95,7 @@ class LinksField(BaseLinksField[_MT]):
         })])
 
 
-class HALSerializer(serializers.HyperlinkedModelSerializer):
+class HALSerializer(HyperlinkedModelSerializer[_MT]):
     url_field_name: str = '_links'
     serializer_url_field = LinksField
 
