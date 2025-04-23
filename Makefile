@@ -1,7 +1,7 @@
 .PHONY: release dist build test coverage clean distclean
 
 PYTHON = python3
-DC = docker-compose run --rm tests
+DC = docker compose run --rm tests
 
 release: test
 	$(PYTHON) -m twine upload dist/*
