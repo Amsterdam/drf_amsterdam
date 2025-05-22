@@ -4,7 +4,8 @@ on:
   schedule:
     # 12:30 UTC is at 8:30 or 9:30 EST depending on DST
     - cron: '30 12 * * *'
-
+permissions:
+  contents: read
 jobs:
   ci:
     runs-on: ubuntu-latest
