@@ -71,7 +71,12 @@ class LinksField(BaseLinksField[_MT]):
 
         super().__init__(**kwargs)
 
-    def get_url(self, obj: _MT | PKOnlyObject, view_name: str, request: Request | None, format: str | None) -> str | None:
+    def get_url(
+        self,
+        obj: _MT | PKOnlyObject,
+        view_name: str, request: Request | None,
+        format: str | None
+    ) -> str | None:
         """
         Given an object, return the URL that hyperlinks to the object.
 
