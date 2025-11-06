@@ -18,7 +18,7 @@ DATABASES = {
 
 # SPATIALITE_LIBRARY_PATH='/usr/local/lib/mod_spatialite.so'
 # you might need to change that for you..
-SPATIALITE_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/mod_spatialite.so.7'
+SPATIALITE_LIBRARY_PATH = '/usr/lib/x86_64-linux-gnu/mod_spatialite.so'
 
 
 ROOT_URLCONF = 'tests.base_urls'

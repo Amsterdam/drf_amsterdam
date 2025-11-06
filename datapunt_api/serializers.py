@@ -9,6 +9,7 @@ from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.db.models import Model
 from django.http import HttpRequest
 from rest_framework import serializers
+from rest_framework.relations import PKOnlyObject
 from rest_framework.request import Request
 from rest_framework.reverse import reverse
 from rest_framework.serializers import HyperlinkedModelSerializer
@@ -70,7 +71,12 @@ class LinksField(BaseLinksField[_MT]):
 
         super().__init__(**kwargs)
 
-    def get_url(self, obj: Model, view_name: str, request: Request | None, format: str | None) -> str | None:
+    def get_url(
+        self,
+        obj: _MT | PKOnlyObject,
+        view_name: str, request: Request | None,
+        format: str | None
+    ) -> str | None:
         """
         Given an object, return the URL that hyperlinks to the object.
 
@@ -86,7 +92,7 @@ class LinksField(BaseLinksField[_MT]):
 
         return reverse(view_name, kwargs=kwargs, request=request, format=format)
 
-    def to_representation(self, value: _MT) -> dict[str, dict[str, str | None]]:
+    def to_representation(self, value: _MT | PKOnlyObject) -> dict[str, dict[str, str | None]]:
         request = self.context.get('request')
         assert self.view_name is not None
 
