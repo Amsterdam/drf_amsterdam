@@ -3,7 +3,8 @@ Serialization classes for Datapunt style Django REST Framework APIs.
 """
 import json
 from collections import OrderedDict
-from typing import TYPE_CHECKING, Any, Generic, Mapping, TypedDict, TypeVar
+from typing import (TYPE_CHECKING, Any, ClassVar, Generic, Mapping, TypedDict,
+                    TypeVar)
 
 from django.contrib.gis.geos import MultiPolygon, Point, Polygon
 from django.db.models import Model
@@ -102,7 +103,7 @@ class LinksField(BaseLinksField[_MT]):
 
 
 class HALSerializer(HyperlinkedModelSerializer[_MT]):
-    url_field_name: str = '_links'
+    url_field_name: ClassVar[str] = '_links'
     serializer_url_field = LinksField
 
 
