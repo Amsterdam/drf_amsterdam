@@ -1,0 +1,45 @@
+[project]
+name = "drf_amsterdam"
+version = "1.1.2"
+description = "Amsterdam Datapunt style REST API classes for Django REST Framework."
+readme = "README.md"
+authors = [
+    { name = "Youri Westerman", email = "y.westerman@amsterdam.nl" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "Django",
+    "defusedxml",
+    "django-filter",
+    "django-rest-framework",
+    "djangorestframework",
+    "djangorestframework-csv",
+    "djangorestframework-xml",
+    "drf-extensions",
+    "pytz",
+    "six",
+    "unicodecsv",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.19,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "datapunt_api"
+
+[dependency-groups]
+dev = [
+    "bumpversion",
+    "django-filter-stubs",
+    "djangorestframework-stubs[compatible-mypy]",
+    "flake8",
+    "isort",
+    "mypy",
+    "mypy-baseline",
+    "pytest-cov",
+    "pytest-django",
+    "spatialite",
+    "twine",
+    "wheel",
+]

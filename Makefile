@@ -1,33 +1,25 @@
-.PHONY: release dist build test coverage clean distclean
-
 PYTHON = python3
 DC = docker compose run --rm tests
 
-release: test
-	$(PYTHON) -m twine upload dist/*
-
-dist:
-	$(PYTHON) setup.py bdist bdist_wheel
-
-build:
-	$(PYTHON) setup.py build
-
 pytest:
-	$(DC) pytest --cov --cov-fail-under=100
+	$(DC) uv run pytest --cov --cov-fail-under=100
 
 isort:
-	$(DC) isort . --check --diff
+	$(DC) uv run isort . --check --diff
 
 flake8:
-	$(DC) flake8
+	$(DC) uv run flake8 --config=.flake8
 
 mypy:
-	$(DC) bash -c "mypy datapunt_api/ --strict | mypy-baseline filter"
+	$(DC) uv run bash -c "mypy . --strict | mypy-baseline filter"
+
+mypy-sync-baseline:
+	$(DC) uv run bash -c "mypy . --strict | mypy-baseline sync"
 
 test: pytest isort flake8 mypy
 
 install:                            ## Install requirements and sync venv with expected state as defined in requirements.txt
-	pip install --upgrade -r requirements.txt -r requirements_dev.txt
+	uv sync --locked
 
 requirements:                       ## Not used
 	@echo "Make requirements is not used. This library does explicitly not pin its dependencies."
