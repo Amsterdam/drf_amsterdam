@@ -8,7 +8,7 @@ isort:
 	$(DC) uv run isort . --check --diff
 
 flake8:
-	$(DC) uv run flake8
+	$(DC) uv run flake8 --config=.flake8
 
 mypy:
 	$(DC) uv run bash -c "mypy . --strict | mypy-baseline filter"
