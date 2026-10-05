@@ -34,5 +34,12 @@ dev = [
     "django-filter-stubs",
     "djangorestframework-stubs[compatible-mypy]",
     "flake8",
-    "isort"
+    "isort",
+    "mypy",
+    "mypy-baseline",
+    "pytest-cov",
+    "pytest-django",
+    "spatialite",
+    "twine",
+    "wheel",
 ]
