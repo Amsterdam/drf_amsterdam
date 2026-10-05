@@ -7,8 +7,10 @@ RUN set -eux; \
       libsqlite3-mod-spatialite \
       gdal-bin
 
+COPY --from=ghcr.io/astral-sh/uv:0.12 /uv /uvx /bin/
+
 COPY . /app/
 
 WORKDIR /app/
 
-RUN pip install --upgrade -r requirements.txt -r requirements_dev.txt
+RUN uv sync --locked
