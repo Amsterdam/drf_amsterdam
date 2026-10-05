@@ -1,1 +1,137 @@
-
+tests/models.py:0: error: Need type annotation for "number"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "centroid"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "centroid_rd"  [var-annotated]
+tests/models.py:0: error: Function is missing a type annotation  [no-untyped-def]
+tests/models.py:0: error: Need type annotation for "station"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "date"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "temperature"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "name"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "age"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "sign"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "name"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "name"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "person"  [var-annotated]
+tests/models.py:0: error: Need type annotation for "geometrie"  [var-annotated]
+src/datapunt_api/serializers.py:0: error: Missing type arguments for generic type "Field"  [type-arg]
+src/datapunt_api/serializers.py:0: error: Function is missing a type annotation for one or more parameters  [no-untyped-def]
+src/datapunt_api/pagination.py:0: error: Argument 1 of "paginate_queryset" is incompatible with supertype "rest_framework.pagination.BasePagination"; supertype defines the argument type as "QuerySet[_Model, _Row] | Sequence[_Row]"  [override]
+src/datapunt_api/pagination.py:0: note: This violates the Liskov substitution principle
+src/datapunt_api/pagination.py:0: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#incompatible-overrides
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/test_bbox.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_bbox.py:0: note: Use "-> None" if function does not return a value
+tests/serializers.py:0: error: Module "datapunt_api.rest" does not explicitly export attribute "HALSerializer"  [attr-defined]
+tests/serializers.py:0: error: Missing type arguments for generic type "HALSerializer"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "DataSetSerializerMixin"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "ModelSerializer"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "SelfLinkSerializerMixin"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "ModelSerializer"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "HALSerializer"  [type-arg]
+tests/serializers.py:0: error: Function is missing a type annotation  [no-untyped-def]
+tests/serializers.py:0: error: Missing type arguments for generic type "HALSerializer"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "ModelSerializer"  [type-arg]
+tests/serializers.py:0: error: Need type annotation for "_display"  [var-annotated]
+tests/serializers.py:0: error: Missing type arguments for generic type "ModelSerializer"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "ModelSerializer"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "ModelSerializer"  [type-arg]
+tests/serializers.py:0: error: Missing type arguments for generic type "ModelSerializer"  [type-arg]
+tests/views.py:0: error: Function is missing a type annotation  [no-untyped-def]
+tests/views.py:0: error: Function is missing a type annotation  [no-untyped-def]
+tests/views.py:0: error: Unexpected keyword argument "srid" for "parse_xyr"  [call-arg]
+tests/views.py:0: note: "parse_xyr" defined in "datapunt_api.bbox"
+tests/views.py:0: error: Missing type arguments for generic type "DatapuntViewSet"  [type-arg]
+tests/views.py:0: error: Incompatible types in assignment (expression has type "tuple[type[_DisabledHTMLFilterBackend], type[DjangoFilterBackend], type[OrderingFilter]]", base class "DatapuntViewSet" defined the type as "list[type[BaseFilterProtocol[Any]]]")  [assignment]
+tests/views.py:0: error: Missing type arguments for generic type "DatapuntViewSet"  [type-arg]
+tests/views.py:0: error: Function is missing a type annotation  [no-untyped-def]
+tests/views.py:0: error: Argument 1 to "list" of "DatapuntViewSet" has incompatible type "TemperatureRecordViewSet"; expected "Request"  [arg-type]
+tests/views.py:0: error: Missing type arguments for generic type "ReadOnlyModelViewSet"  [type-arg]
+tests/views.py:0: error: Missing type arguments for generic type "ReadOnlyModelViewSet"  [type-arg]
+tests/views.py:0: error: Missing type arguments for generic type "DatapuntViewSetWritable"  [type-arg]
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Call to untyped function "get_wgs_puntje" in typed context  [no-untyped-call]
+tests/test_serializers.py:0: error: Call to untyped function "get_rd_puntje" in typed context  [no-untyped-call]
+tests/test_serializers.py:0: error: Function is missing a type annotation  [no-untyped-def]
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Call to untyped function "valid_response" in typed context  [no-untyped-call]
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Call to untyped function "valid_response" in typed context  [no-untyped-call]
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Argument 2 to "get" of "APIClient" has incompatible type "dict[str, object]"; expected "Mapping[str, str | bytes | float | Iterable[str | bytes | float]] | Iterable[tuple[str, str | bytes | float | Iterable[str | bytes | float]]] | None"  [arg-type]
+tests/test_serializers.py:0: error: Call to untyped function "valid_response" in typed context  [no-untyped-call]
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Item "None" of "dict[str, str] | None" has no attribute "get"  [union-attr]
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_serializers.py:0: note: Use "-> None" if function does not return a value
+tests/test_serializers.py:0: error: Call to untyped function "get_wgs_puntje" in typed context  [no-untyped-call]
+tests/test_serializers.py:0: error: Call to untyped function "get_rd_puntje" in typed context  [no-untyped-call]
+tests/test_serializers.py:0: error: Item "None" of "Any | None" has no attribute "get"  [union-attr]
+tests/urls.py:0: error: Function is missing a type annotation  [no-untyped-def]
+tests/urls.py:0: error: "get_api_root_view" undefined in superclass  [misc]
+tests/urls.py:0: error: Variable "cls" is not valid as a type  [valid-type]
+tests/urls.py:0: note: See https://mypy.readthedocs.io/en/stable/common_issues.html#variables-vs-type-aliases
+tests/urls.py:0: error: Invalid base class "cls"  [misc]
+tests/urls.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: note: Use "-> None" if function does not return a value
+tests/test_pagination.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: note: Use "-> None" if function does not return a value
+tests/test_pagination.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: note: Use "-> None" if function does not return a value
+tests/test_pagination.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: note: Use "-> None" if function does not return a value
+tests/test_pagination.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: note: Use "-> None" if function does not return a value
+tests/test_pagination.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: note: Use "-> None" if function does not return a value
+tests/test_pagination.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: note: Use "-> None" if function does not return a value
+tests/test_pagination.py:0: error: Function is missing a return type annotation  [no-untyped-def]
+tests/test_pagination.py:0: note: Use "-> None" if function does not return a value
